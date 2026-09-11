@@ -3,6 +3,7 @@ import { validateContact, type ContactResult } from "@/lib/contact";
 import { profile } from "@/lib/site";
 import type { SmtpConfig } from "./smtp-config";
 import { sendContactMail, type ContactMail, type SendContactMail } from "./smtp-mailer";
+import { renderContactEmails } from "./contact-email-template";
 
 const maxBodyBytes = 24 * 1024;
 const unavailable = "The form is temporarily unavailable. Please email me directly using the address beside the form.";
@@ -34,7 +35,7 @@ async function readBody(request: Request): Promise<string> {
   } finally { reader.releaseLock(); }
 }
 
-/** A fixed recipient and endpoint prevent this public form becoming an email relay. */
+/** Enquiries go to the configured inbox; only a fixed acknowledgement goes to the visitor. */
 export async function handleContact(request: Request, config: DeliveryConfig, send: SendContactMail = sendContactMail): Promise<Response> {
   const origin = request.headers.get("origin");
   if (!origin || (origin !== new URL(request.url).origin && origin !== config.siteUrl)) {
@@ -70,12 +71,12 @@ export async function handleContact(request: Request, config: DeliveryConfig, se
   const smtp = config.smtp;
   const text = `Name: ${name}\nEmail: ${email}\nEnquiry: ${topic}\n\n${message}`;
   const digest = createHash("sha256").update(JSON.stringify([smtp.user, smtp.to, text])).digest("hex");
+  const templates = renderContactEmails(parsed.data, { siteUrl: config.siteUrl, replyEmail: smtp.to, reference: body.submissionId.slice(0, 8).toUpperCase() });
   const mail: ContactMail = {
     from: { name: profile.name, address: smtp.user },
     to: smtp.to,
     replyTo: { name, address: email },
-    subject: `Portfolio enquiry: ${topic}`,
-    text,
+    ...templates.notification,
     // Stable for troubleshooting retries. SMTP does not guarantee deduplication.
     messageId: `<portfolio.${body.submissionId}.${digest}@${smtp.user.split("@")[1]}>`,
   };
@@ -84,7 +85,6 @@ export async function handleContact(request: Request, config: DeliveryConfig, se
     if (!receipt.accepted.some(address => address.toLowerCase() === smtp.to.toLowerCase())) {
       return reply({ ok: false, message: "Sending wasn’t confirmed. Please retry the same message, or email me directly." }, 502);
     }
-    return reply({ ok: true }, 200);
   } catch (error) {
     const responseCode = typeof error === "object" && error !== null && "responseCode" in error ? error.responseCode : undefined;
     if (typeof responseCode === "number" && responseCode >= 400 && responseCode < 500) {
@@ -92,4 +92,22 @@ export async function handleContact(request: Request, config: DeliveryConfig, se
     }
     return reply({ ok: false, message: "Sending wasn’t confirmed. Please retry the same message, or email me directly." }, 502);
   }
+
+  // A failed acknowledgement must not turn an accepted enquiry into a retry/duplicate.
+  const confirmation: ContactMail = {
+    from: mail.from,
+    to: email,
+    replyTo: { name: profile.name, address: smtp.to },
+    ...templates.confirmation,
+    messageId: `<portfolio-confirmation.${body.submissionId}.${digest}@${smtp.user.split("@")[1]}>`,
+    headers: { "Auto-Submitted": "auto-generated", "X-Auto-Response-Suppress": "All" },
+  };
+  try {
+    const receipt = await send(smtp, confirmation);
+    if (receipt.accepted.some(address => address.toLowerCase() === email.toLowerCase())) {
+      return reply({ ok: true, confirmation: "sent" }, 200);
+    }
+  } catch { /* The enquiry was accepted. Report the acknowledgement separately. */ }
+  console.warn("Contact acknowledgement not confirmed", { submissionId: body.submissionId });
+  return reply({ ok: true, confirmation: "unavailable" }, 200);
 }

@@ -56,7 +56,12 @@ export function ContactForm() {
         return;
       }
       if (!response.ok) throw new Error("Unconfirmed submission");
-      setFeedback({ ok: true, text: "Thanks for reaching out. Your message has been submitted, and I’ll reply by email." });
+      const confirmationText = result.confirmation === "sent"
+        ? " A confirmation email is on its way. I’ll reply personally by email."
+        : result.confirmation === "unavailable"
+          ? " The confirmation email couldn’t be sent, but I have your enquiry and will reply by email."
+          : " I’ll reply by email.";
+      setFeedback({ ok: true, text: `Thanks for reaching out. Your message has been submitted.${confirmationText}` });
       submission.current = null;
       form.reset();
     } catch {
@@ -129,7 +134,7 @@ export function ContactForm() {
         <div className={`contact-feedback${feedback ? feedback.ok ? " is-success" : " is-error" : ""}`} role="status" aria-live="polite" aria-atomic="true">
           {feedback && <p>{feedback.text}</p>}
         </div>
-        <p className="contact-privacy">Your name, email, and message are used to respond to your enquiry.</p>
+        <p className="contact-privacy">Your details are used to send a confirmation and respond to your enquiry.</p>
       </form>
     </div>
   );

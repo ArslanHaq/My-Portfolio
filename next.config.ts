@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  outputFileTracingIncludes: {
+    "/api/contact": ["./public/images/muhammad-arsalan-email.jpg"],
+  },
   async headers() {
     return [{
       source: "/:path*",

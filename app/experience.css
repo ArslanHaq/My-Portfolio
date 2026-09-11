@@ -32,6 +32,7 @@
 body { font-family: Arial, Helvetica, sans-serif; }
 .site-header { height: 84px; backdrop-filter: none; }
 .brand { font-size: 22px; }
+.brand-portrait { width: 40px; height: 40px; flex: none; border-radius: 50%; object-fit: cover; border: 2px solid var(--highlight); }
 .nav-links > a { font-size: 13px; }
 .nav-actions { gap: 13px; }
 .resume-nav { border-radius: 30px; }
@@ -126,7 +127,8 @@ body { font-family: Arial, Helvetica, sans-serif; }
 .metric span { font-size: 10px; }
 .stack-section { background: var(--surface); padding: 64px 0; }
 .stack-intro h2 { font-size: 34px; }
-.skill-chip { font-size: 12px; min-height: 35px; align-items: center; }
+.skill-chip { display: inline-flex; gap: 8px; font-size: 12px; min-height: 35px; align-items: center; white-space: nowrap; }
+.skill-icon { width: 16px; height: 16px; flex: none; color: var(--highlight); }
 .experience-main h3 { font-size: 29px; }
 .contact { padding: 0 0 25px; border-top: 0; }
 .contact-panel { background: radial-gradient(ellipse at top left,#ff5f560b,transparent 65%),var(--surface); color: var(--text); border: 1px solid var(--line); border-radius: 26px; padding: 58px; }

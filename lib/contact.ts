@@ -16,7 +16,7 @@ export type ContactMessage = {
   topic: typeof contactTopics[number];
   message: string;
 };
-export type ContactResult = { ok: true } | { ok: false; message: string; errors?: ContactErrors };
+export type ContactResult = { ok: true; confirmation?: "sent" | "unavailable" } | { ok: false; message: string; errors?: ContactErrors };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -44,7 +44,7 @@ export function validateContact(value: unknown): { ok: true; data: ContactMessag
 
 export function isContactResult(value: unknown): value is ContactResult {
   if (!isRecord(value)) return false;
-  if (value.ok === true) return true;
+  if (value.ok === true) return value.confirmation === undefined || value.confirmation === "sent" || value.confirmation === "unavailable";
   if (value.ok !== false || typeof value.message !== "string") return false;
   return value.errors === undefined || (isRecord(value.errors) && Object.entries(value.errors).every(([field, error]) =>
     ["name", "email", "topic", "message"].includes(field) && typeof error === "string"));

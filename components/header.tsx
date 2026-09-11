@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { BrandMark, Icon } from "./icon";
+import Image from "next/image";
+import { Icon } from "./icon";
 import { toggleTheme, useTheme, toggleMotion, usePausedMotion } from "@/lib/preferences";
 import { profile } from "@/lib/site";
 
@@ -64,7 +65,7 @@ export function Header() {
     <header className="site-header" ref={header}>
       <div className="wrap nav-row">
         <a className="brand" href="#top" aria-label="Muhammad Arsalan, back to top" onClick={() => setOpen(false)}>
-          <BrandMark /><span>arsalan<span>.dev</span></span>
+          <Image className="brand-portrait" src="/images/muhammad-arsalan-avatar.webp" width={40} height={40} alt="" loading="eager" unoptimized /><span>arsalan<span>.dev</span></span>
         </a>
         <nav className={`nav-links${open ? " open" : ""}`} id="main-navigation" aria-label="Main navigation">
           {links.map(link => (

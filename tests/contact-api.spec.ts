@@ -30,22 +30,52 @@ test("SMTP uses fixed addresses and safe reply-to, with stable message IDs", asy
   const transport: SendContactMail = async (settings, mail) => {
     expect(settings).toEqual(smtp);
     messages.push(mail);
-    return { accepted: [smtp.to] };
+    return { accepted: [mail.to] };
   };
   const first = await handleContact(request({ ...submission, to: "untrusted@example.test", from: "spoofed@example.test" }), config, transport);
   const retry = await handleContact(request(), config, transport);
   const changed = await handleContact(request({ ...submission, message: `${submission.message} Please call next week.` }), config, transport);
   expect(first.status).toBe(200);
-  expect(await first.json()).toEqual({ ok: true });
+  expect(await first.json()).toEqual({ ok: true, confirmation: "sent" });
   expect(retry.status).toBe(200);
   expect(changed.status).toBe(200);
   expect(messages[0].to).toBe(smtp.to);
   expect(messages[0].replyTo).toEqual({ name: submission.name, address: submission.email });
   expect(messages[0].from.address).toBe(smtp.user);
-  expect(messages[0]).not.toHaveProperty("html");
-  expect(messages[0].messageId).toBe(messages[1].messageId);
-  expect(messages[0].messageId).not.toBe(messages[2].messageId);
+  expect(messages).toHaveLength(6);
+  expect(messages[0].html).toContain("PORTFOLIO / NEW ENQUIRY");
+  expect(messages[0].text).toContain(submission.message);
+  expect(messages[1].to).toBe(submission.email);
+  expect(messages[1].from.address).toBe(smtp.user);
+  expect(messages[1].replyTo.address).toBe(smtp.to);
+  expect(messages[1].headers).toEqual({ "Auto-Submitted": "auto-generated", "X-Auto-Response-Suppress": "All" });
+  expect(messages[1].html).not.toContain(submission.message);
+  expect(messages[1].text).not.toContain(submission.message);
+  expect(messages[0].messageId).toBe(messages[2].messageId);
+  expect(messages[0].messageId).not.toBe(messages[4].messageId);
+  expect(messages[1].messageId).toBe(messages[3].messageId);
+  expect(messages[0].messageId).not.toBe(messages[1].messageId);
   expect(first.headers.get("cache-control")).toBe("no-store");
+});
+
+test("acknowledgements wait for accepted enquiries and failures do not request a duplicate submission", async () => {
+  for (const failure of ["throw", "reject", "wrong-recipient"]) {
+    const destinations: string[] = [];
+    const send: SendContactMail = async (_, mail) => {
+      destinations.push(mail.to);
+      if (mail.to === smtp.to) return { accepted: [smtp.to] };
+      if (failure === "throw") throw new Error("private-provider-detail");
+      return { accepted: failure === "reject" ? [] : ["wrong@example.test"] };
+    };
+    const response = await handleContact(request(), config, send);
+    expect(destinations).toEqual([smtp.to, submission.email]);
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ ok: true, confirmation: "unavailable" });
+  }
+  let calls = 0;
+  const rejected: SendContactMail = async () => { calls++; return { accepted: [] }; };
+  expect((await handleContact(request(), config, rejected)).status).toBe(502);
+  expect(calls).toBe(1);
 });
 
 test("invalid fields return actionable errors before delivery", async () => {
