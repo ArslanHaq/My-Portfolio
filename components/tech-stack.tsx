@@ -1,9 +1,38 @@
+const skillGroups = [
+  {
+    title: "Frontend & interfaces",
+    primary: ["React", "Next.js", "TypeScript", "JavaScript"],
+    supporting: ["HTML5", "Tailwind CSS", "Material UI", "React Flow", "React Query", "Redux Toolkit"],
+  },
+  {
+    title: "Backend, data & deployment",
+    primary: ["Node.js", "NestJS", "Express.js", "AWS", "Docker"],
+    supporting: ["REST APIs", "GraphQL", "SQL", "MongoDB", "EC2", "S3", "CloudFront", "ECR", "IAM"],
+  },
+  {
+    title: "Mobile & integrations",
+    primary: ["React Native", "NextAuth", "OpenAI"],
+    supporting: ["Secure Storage", "Ethers", "Viem", "Web3Modal", "MetaMask", "Git", "GitFlow", "Jira"],
+  },
+];
+
 export function TechStack() {
   return (
-    <section className="stack-section" aria-labelledby="stack-title"><div className="wrap"><div className="stack-intro"><h2 id="stack-title">A toolkit, not a comfort zone.</h2><p>Tools and technologies from my engineering work.</p></div><div className="stack-groups">
-<div className="stack-group"><h3 className="mono">Interface &amp; application</h3><div className="skill-chips"><span className="skill-chip primary">React</span><span className="skill-chip primary">Next.js</span><span className="skill-chip primary">TypeScript</span><span className="skill-chip primary">JavaScript</span><span className="skill-chip">Tailwind CSS</span><span className="skill-chip">Material UI</span><span className="skill-chip">React Flow</span><span className="skill-chip">React Query</span><span className="skill-chip">Redux Toolkit</span><span className="skill-chip">GraphQL</span></div></div>
-<div className="stack-group"><h3 className="mono">Backend &amp; cloud</h3><div className="skill-chips"><span className="skill-chip primary">NestJS</span><span className="skill-chip primary">Express.js</span><span className="skill-chip primary">AWS</span><span className="skill-chip primary">Docker</span><span className="skill-chip">EC2</span><span className="skill-chip">S3</span><span className="skill-chip">ECS</span><span className="skill-chip">Lambda</span><span className="skill-chip">CloudFront</span><span className="skill-chip">SQL</span><span className="skill-chip">MongoDB</span><span className="skill-chip">Python</span><span className="skill-chip">C++</span></div></div>
-<div className="stack-group"><h3 className="mono">Mobile, Web3 &amp; workflow</h3><div className="skill-chips"><span className="skill-chip primary">React Native</span><span className="skill-chip primary">Ethers</span><span className="skill-chip primary">Viem</span><span className="skill-chip">Web3Modal</span><span className="skill-chip">MetaMask</span><span className="skill-chip">Secure Storage</span><span className="skill-chip">Android Studio</span><span className="skill-chip">GitFlow</span><span className="skill-chip">Jira</span></div></div>
-</div></div></section>
+    <section className="stack-section" aria-labelledby="stack-title">
+      <div className="wrap">
+        <div className="stack-intro"><h2 id="stack-title">Tools behind the work.</h2><p>Across websites, full-stack applications, and mobile experiences.</p></div>
+        <div className="stack-groups">
+          {skillGroups.map(group => (
+            <div className="stack-group" key={group.title}>
+              <h3 className="mono">{group.title}</h3>
+              <div className="skill-chips">
+                {group.primary.map(skill => <span className="skill-chip primary" key={skill}>{skill}</span>)}
+                {group.supporting.map(skill => <span className="skill-chip" key={skill}>{skill}</span>)}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

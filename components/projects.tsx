@@ -45,7 +45,7 @@ export function Projects() {
       <div className="wrap">
         <div className="section-heading reveal">
           <div><p className="section-kicker mono"><span className="index">01 /</span> SELECTED WORK</p><h2 id="work-title">Ideas into experiences.</h2></div>
-          <p className="section-subtitle">A selection of products I’ve helped bring to life—from video platforms to intelligent learning.</p>
+          <p className="section-subtitle">Selected websites and applications across video, learning, business, and mobile.</p>
         </div>
         <div className="filters" role="group" aria-label="Filter projects by category">
           {filters.map(item => <button key={item.id} className="filter" type="button" aria-pressed={filter === item.id}
@@ -53,15 +53,15 @@ export function Projects() {
           <span className="project-count mono" id="project-count" role="status" aria-live="polite">{String(count).padStart(2, "0")} projects</span>
         </div>
         <div className="projects-grid">
-          {projects.map(project => (
+          {projects.map((project, index) => (
             <article className="project-card reveal" key={project.id} id={`project-${project.id}`} hidden={!visible(project)}>
-              <ProjectArtwork id={project.id} />
+              <ProjectArtwork id={project.id} order={index + 1} />
               <div className="project-content">
                 <div className="project-meta mono">{project.meta}</div>
                 <div className="project-title-row">
                   <h3>{project.title}</h3>
                   {project.url ? (
-                    <a className="round-link" href={project.url} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${project.title} (opens in a new tab)`}><Icon name="arrow-up-right" /></a>
+                    <a className="round-link" href={project.url} target="_blank" rel="noopener noreferrer" aria-label={`${project.linkLabel ?? `Visit ${project.title}`} (opens in a new tab)`}><Icon name="arrow-up-right" /></a>
                   ) : (
                     <button className="round-link" type="button" aria-label={`Read about ${project.title}`} onClick={event => explore(project, event.currentTarget)}><Icon name="arrow-up-right" /></button>
                   )}
@@ -76,7 +76,7 @@ export function Projects() {
             </article>
           ))}
         </div>
-        <p className="visual-note"><Icon name="info" />Project visuals are custom interface illustrations, not production screenshots.</p>
+        <p className="visual-note"><Icon name="info" />Project cards use interface illustrations and typography. The gallery above contains supplied presentations and UI concepts.</p>
       </div>
       <dialog className="project-dialog" ref={dialog} id="project-dialog" aria-labelledby="dialog-title" onClose={onClose}
         onClick={event => {
@@ -89,17 +89,17 @@ export function Projects() {
             <div><p className="dialog-eyebrow mono">{selected.category}</p><h2 className="dialog-title" id="dialog-title">{selected.title}</h2></div>
             <button className="icon-button" type="button" aria-label="Close project details" onClick={() => dialog.current?.close()}><Icon name="close" /></button>
           </div>
-          <p className="dialog-role">{selected.role}</p>
+          {selected.role && <p className="dialog-role">{selected.role}</p>}
           <p className="dialog-summary">{selected.summary}</p>
-          <h3 className="dialog-section-title">My contribution</h3>
+          <h3 className="dialog-section-title">{selected.detailHeading ?? "My contribution"}</h3>
           <ul className="dialog-list">{selected.contributions.map(point => <li key={point}>{point}</li>)}</ul>
-          <h3 className="dialog-section-title">Technology</h3>
-          <div className="dialog-tags">{selected.tech.map(tag => <span className="tag" key={tag}>{tag}</span>)}</div>
+          {selected.tech.length > 0 && <><h3 className="dialog-section-title">Technology</h3>
+          <div className="dialog-tags">{selected.tech.map(tag => <span className="tag" key={tag}>{tag}</span>)}</div></>}
           <div className="dialog-links">
-            {selected.url && <a className="button button-primary" href={selected.url} target="_blank" rel="noopener noreferrer">Visit project <Icon name="arrow-up-right" /></a>}
+            {selected.url && <a className="button button-primary" href={selected.url} target="_blank" rel="noopener noreferrer">{selected.linkLabel ?? "Visit project"} <Icon name="arrow-up-right" /></a>}
             <a className="button button-secondary" href={`mailto:${profile.email}?subject=${encodeURIComponent(`Let’s talk about ${selected.title}`)}`}>Discuss a similar project</a>
           </div>
-          <p className="dialog-note">{selected.url ? "Project link supplied in my resume. Project availability and the current product may change." : "No public project link was included in my resume. Get in touch to discuss my contribution."}</p>
+          <p className="dialog-note">{selected.linkNote ?? (selected.url ? "Explore the public website for more about the product." : "Get in touch to discuss this application and my contribution.")}</p>
         </div>}
       </dialog>
     </section>

@@ -4,13 +4,13 @@ import { readFile } from "node:fs/promises";
 
 const resumePath = "/resume/Muhammad-Arsalan-Resume.pdf";
 
-test("homepage has six projects and a responsive layout", async ({ page }) => {
+test("homepage has eight projects and a responsive layout", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto("/");
   await expect(page).toHaveTitle(/Muhammad Arsalan/);
   await expect(page.locator("h1")).toContainText("experiences");
-  await expect(page.locator(".project-card:visible")).toHaveCount(6);
+  await expect(page.locator(".project-card:visible")).toHaveCount(8);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
   expect(errors).toEqual([]);
 });
@@ -23,7 +23,7 @@ test("category filtering works", async ({ page }) => {
   await page.getByRole("button", { name: "Web3", exact: true }).click();
   await expect(page.locator(".project-card:visible")).toHaveCount(1);
   await page.getByRole("button", { name: "All projects", exact: true }).click();
-  await expect(page.locator(".project-card:visible")).toHaveCount(6);
+  await expect(page.locator(".project-card:visible")).toHaveCount(8);
 });
 
 test("project dialog supports keyboard dismissal and restores focus", async ({ page }) => {
@@ -44,6 +44,35 @@ test("theme selection persists after reload", async ({ page }) => {
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
   await expect(page.getByRole("button", { name: "Switch to dark theme" })).toBeVisible();
+});
+
+test("project details keep unconfirmed roles and technologies out of the UI", async ({ page }) => {
+  await page.goto("/");
+  for (const title of ["XcelTube", "Pherrix"]) {
+    await page.getByRole("button", { name: `Explore ${title}`, exact: true }).click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog.getByRole("heading", { name: "Interface highlights", exact: true })).toBeVisible();
+    await expect(dialog.locator(".dialog-role")).toHaveCount(0);
+    await expect(dialog.getByRole("heading", { name: "Technology", exact: true })).toHaveCount(0);
+    await expect(dialog.getByRole("link", { name: "Visit project" })).toHaveAttribute("href", /^https:\/\//);
+    await page.keyboard.press("Escape");
+  }
+  await page.getByRole("button", { name: "Explore Fitcoin", exact: true }).click();
+  await expect(page.getByRole("dialog")).toContainText("The linked Webflow website is a product showcase.");
+  await expect(page.getByRole("dialog").getByRole("link", { name: "View Fitcoin showcase" })).toHaveAttribute("href", "https://fitcoin-client.webflow.io/");
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Explore DDID Wallet", exact: true }).click();
+  await expect(page.getByRole("dialog").getByRole("link", { name: "Visit project" })).toHaveCount(0);
+});
+
+test("gallery references match the multi-project presentations", async ({ page }) => {
+  await page.goto("/");
+  const first = page.locator(".showcase-card").first();
+  await expect(first.getByRole("link", { name: /Fitcoin showcase/ })).toHaveAttribute("href", "https://fitcoin-client.webflow.io/");
+  await expect(first.getByRole("link", { name: /SupplyED prototype/ })).toHaveAttribute("href", "https://supplyed.vercel.app/");
+  await expect(first.getByRole("link", { name: /XcelTube/ })).toHaveAttribute("href", "https://www.xceltube.com/");
+  await expect(page.locator(".showcase-card").nth(2)).toContainText("mobile UI concepts");
+  await expect(page.locator(".showcase-card").nth(3)).toContainText("sample results");
 });
 
 test("resume URL serves the original PDF", async ({ request }) => {

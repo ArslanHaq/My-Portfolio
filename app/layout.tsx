@@ -4,6 +4,7 @@ import { IconSprite } from "@/components/icon-sprite";
 import { getSiteUrl, profile, siteDescription, siteTitle } from "@/lib/site";
 import "./globals.css";
 import "./experience.css";
+import "./workbench.css";
 
 const siteUrl = getSiteUrl();
 export const metadata: Metadata = {
@@ -27,7 +28,7 @@ export const viewport: Viewport = { width: "device-width", initialScale: 1, them
 
 // Fixed, trusted initialization script: applies stored preferences before the first paint.
 const preferencesScript = `(function(){var r=document.documentElement;try{r.dataset.theme=localStorage.getItem('arsalan-theme')==='light'?'light':'dark';r.classList.toggle('motion-paused',localStorage.getItem('arsalan-motion')==='paused'||matchMedia('(prefers-reduced-motion: reduce)').matches)}catch(e){r.dataset.theme='dark';r.classList.toggle('motion-paused',matchMedia('(prefers-reduced-motion: reduce)').matches)}})();`;
-const noScriptStyles = `.reveal{opacity:1!important;transform:none!important}.filters,.details-button,button.round-link,#theme-toggle,#header-motion-toggle,#motion-toggle,#copy-email,#menu-toggle{display:none!important}@media(max-width:760px){.site-header{height:auto;min-height:74px}.nav-row{padding-block:15px;flex-wrap:wrap}.nav-links{position:static;display:flex;flex-direction:row;padding:0;border:0;gap:16px;box-shadow:none;order:3;flex-basis:100%;justify-content:center}.nav-links>a{font-size:12px;padding:4px 0}}`;
+const noScriptStyles = `.reveal{opacity:1!important;transform:none!important}.workbench-controls,.filters,.details-button,button.round-link,#theme-toggle,#header-motion-toggle,#motion-toggle,#copy-email,#menu-toggle{display:none!important}@media(max-width:760px){.site-header{height:auto;min-height:74px}.nav-row{padding-block:15px;flex-wrap:wrap}.nav-links{position:static;display:flex;flex-direction:row;padding:0;border:0;gap:16px;box-shadow:none;order:3;flex-basis:100%;justify-content:center}.nav-links>a{font-size:12px;padding:4px 0}}`;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

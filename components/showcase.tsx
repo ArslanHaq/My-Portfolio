@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { showcaseImages, showreel } from "@/data/showcase";
+import { workReferences } from "@/data/work-references";
 import { Icon } from "./icon";
 
 export function Showcase() {
@@ -58,6 +59,11 @@ export function Showcase() {
                 <p className="showcase-category mono"><span>{String(index + 1).padStart(2, "0")}</span> {item.category}</p>
                 <h3>{item.title}</h3>
                 <p className="showcase-description">{item.description}</p>
+                <div className="showcase-project-links" aria-label="Websites featured in this presentation">
+                  {item.references.map(id => <a key={id} href={workReferences[id].url} target="_blank" rel="noopener noreferrer">
+                    {workReferences[id].label}<Icon name="arrow-up-right" /><span className="sr-only"> (opens in a new tab)</span>
+                  </a>)}
+                </div>
               </figcaption>
             </figure>
           ))}

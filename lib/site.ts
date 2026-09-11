@@ -1,6 +1,8 @@
 export const profile = {
   name: "Muhammad Arsalan",
-  title: "Full-Stack Developer",
+  title: "Full Stack Developer",
+  currentRole: "Senior Software Engineer",
+  employer: "Idanimo LLC",
   email: "arslankhanhaq332@gmail.com",
   location: "Islamabad, Pakistan",
   phone: "+923093244976",
@@ -12,7 +14,7 @@ export const profile = {
 };
 
 export const siteTitle = "Muhammad Arsalan — Full-Stack Developer · Web, Mobile & AI";
-export const siteDescription = "Muhammad Arsalan is a full-stack developer and Senior Software Engineer building web platforms, React Native apps, AI learning experiences, and blockchain integrations.";
+export const siteDescription = "Muhammad Arsalan is a full stack developer in Islamabad, building custom websites, full stack applications, and React Native experiences. Senior Software Engineer at Idanimo LLC.";
 
 /** Use the deployed domain without requiring a secret or inventing a public URL. */
 export function getSiteUrl(): string | undefined {

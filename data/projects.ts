@@ -1,14 +1,19 @@
-export type ProjectId = "cvvid" | "tsl" | "cell" | "visa" | "ddid" | "fitcoin";
+import { workReferences } from "./work-references";
+
+export type ProjectId = "cvvid" | "tsl" | "xceltube" | "fitcoin" | "pherrix" | "cell" | "visa" | "ddid";
 export type ProjectCategory = "web" | "mobile" | "web3";
 export interface Project {
   id: ProjectId;
   title: string;
   category: string;
-  role: string;
+  role: string | null;
   summary: string;
   contributions: string[];
+  detailHeading?: string;
   tech: string[];
   url: string | null;
+  linkLabel?: string;
+  linkNote?: string;
   categories: ProjectCategory[];
   meta: string;
   short: string;
@@ -16,7 +21,7 @@ export interface Project {
   scope: string;
 }
 
-/** Project descriptions and supplied links are based on the owner's resume. */
+/** Owner-supplied work descriptions. Unconfirmed roles and stacks stay absent. */
 export const projects: Project[] = [
   {
     "id": "cvvid",
@@ -38,12 +43,12 @@ export const projects: Project[] = [
       "Tailwind CSS",
       "Google Analytics"
     ],
-    "url": "https://www.cvvid.com/",
+    "url": workReferences.cvvid.url,
     "categories": [
       "web"
     ],
     "meta": "VIDEO EXPERIENCE / WEB",
-    "short": "Record it. Edit it. Share your story. A video CV platform built around a simpler way to introduce yourself.",
+    "short": "A video CV platform with recording, editing, authentication, and QR-code sharing.",
     "tags": [
       "Next.js",
       "FFmpeg",
@@ -53,14 +58,14 @@ export const projects: Project[] = [
   },
   {
     "id": "tsl",
-    "title": "Think Study And Learn",
+    "title": "Think Study Learn",
     "category": "AI assistant · Learning platform",
     "role": "Full-stack development",
-    "summary": "An educational platform where students can register, watch video content, and access course materials. My work also includes a multimodal AI assistant for real-time voice conversations, text chat, and image understanding.",
+    "summary": "An educational platform combining video lessons, course materials, and AI-assisted learning. I contributed to the web application, backend integration, and AWS-based content delivery, alongside a multimodal assistant for voice, text, and image interaction.",
     "contributions": [
-      "Contributed to the full-stack educational platform, including course content and video-learning experiences.",
-      "Used AWS services for scalable video hosting, reliability, and data management.",
-      "Built a multimodal AI assistant using streaming speech recognition, speech synthesis, and vision models, with safety, analytics, and on-device/offline fallbacks."
+      "Contributed to student registration, course content, and video-learning experiences.",
+      "Connected the application with NestJS services and AWS infrastructure for content delivery and data management.",
+      "Developed a multimodal AI assistant supporting voice conversations, text chat, and image understanding."
     ],
     "tech": [
       "Next.js",
@@ -73,12 +78,12 @@ export const projects: Project[] = [
       "S3",
       "CloudFront"
     ],
-    "url": "https://thinkstudylearn.com/",
+    "url": workReferences.tsl.url,
     "categories": [
       "web"
     ],
     "meta": "AI & EDUCATION / FULL STACK",
-    "short": "A richer way to learn, with course content and an AI assistant that listens, speaks, and understands images.",
+    "short": "Video lessons, course materials, and an AI assistant for voice, text, and image-based learning.",
     "tags": [
       "Next.js",
       "NestJS",
@@ -88,15 +93,102 @@ export const projects: Project[] = [
     "scope": "Voice · Text · Vision"
   },
   {
+    "id": "xceltube",
+    "title": "XcelTube",
+    "category": "Learning platform · Web applications",
+    "role": null,
+    "summary": "A study experience connecting video lessons, PDF notes, practice questions, and AI-assisted learning. Chapter navigation and immediate answer feedback help students move between content and practice.",
+    "contributions": [
+      "Chapter-based video lessons and PDF notes with page and zoom controls.",
+      "Practice questions with correctness feedback and answer explanations.",
+      "AI tutor conversations and follow-up prompts."
+    ],
+    "detailHeading": "Interface highlights",
+    "tech": [],
+    "url": workReferences.xceltube.url,
+    "categories": [
+      "web"
+    ],
+    "meta": "INTERACTIVE LEARNING / WEB",
+    "short": "Video lessons, PDF notes, practice questions, and AI-assisted learning in one study interface.",
+    "tags": [
+      "Learning platform",
+      "Interactive tools"
+    ],
+    "scope": "Education platform"
+  },
+  {
+    "id": "fitcoin",
+    "title": "Fitcoin",
+    "category": "Web3 fitness · Web & mobile",
+    "role": "React and React Native contributor · Aurora Solutions",
+    "summary": "I contributed to Fitcoin’s React web application and React Native mobile app, connecting fitness interfaces with blockchain services, application state, and wallet interactions.",
+    "contributions": [
+      "Integrated blockchain functionality into the React web application’s front end.",
+      "Used Ethers, Web3Modal, Viem, and MetaMask to connect the user interface with blockchain functionality.",
+      "Extended the Fitcoin ecosystem through a React Native mobile app with corresponding blockchain integrations."
+    ],
+    "tech": [
+      "React",
+      "React Native",
+      "Redux Toolkit",
+      "Ethers",
+      "Web3Modal",
+      "Viem",
+      "MetaMask"
+    ],
+    "url": workReferences.fitcoin.url,
+    "categories": [
+      "web",
+      "mobile",
+      "web3"
+    ],
+    "meta": "WEB3 / WEB + MOBILE",
+    "short": "Web and mobile fitness interfaces connected with Web3 services and wallet functionality.",
+    "tags": [
+      "React",
+      "React Native",
+      "Ethers",
+      "Viem"
+    ],
+    "scope": "Blockchain integration",
+    "linkLabel": "View Fitcoin showcase",
+    "linkNote": "The linked Webflow website is a product showcase. My React and React Native contributions cover the application and blockchain integrations."
+  },
+  {
+    "id": "pherrix",
+    "title": "Pherrix",
+    "category": "Corporate website · Biotechnology",
+    "role": null,
+    "summary": "A biotech corporate website organized around bento-style navigation and connected content pages. Its visual system brings science, pipeline, clinical, team, news, and publication information into a clear structure.",
+    "contributions": [
+      "Bento-style homepage navigation across the company’s content areas.",
+      "Connected pages with transitions and a consistent visual hierarchy.",
+      "Pipeline and stage information presented through a structured interface."
+    ],
+    "detailHeading": "Interface highlights",
+    "tech": [],
+    "url": workReferences.pherrix.url,
+    "categories": [
+      "web"
+    ],
+    "meta": "CORPORATE WEBSITE / DESIGN",
+    "short": "A biotech website with bento-style navigation, page transitions, and organized pipeline content.",
+    "tags": [
+      "Website design",
+      "Bento navigation"
+    ],
+    "scope": "Corporate website"
+  },
+  {
     "id": "cell",
     "title": "Cell Operative",
     "category": "Inventory management · Web & mobile",
     "role": "Web and React Native development",
-    "summary": "A store and inventory management system spanning a web experience and a React Native mobile app. My work focused on pixel-perfect interfaces, application integration, and multilingual support on the web.",
+    "summary": "Web and mobile interfaces for store and inventory management. I implemented detailed web designs with Next.js and TypeScript and developed a connected React Native application.",
     "contributions": [
-      "Created pixel-perfect web interfaces and integrations using Next.js, TypeScript, Tailwind CSS, and Server Actions.",
-      "Added multilingual support to the store and inventory management website.",
-      "Built the React Native mobile app using Redux Toolkit, TypeScript, secure storage, and REST APIs."
+      "Developed web interfaces with Next.js, TypeScript, Tailwind CSS, and Server Actions.",
+      "Built the React Native application with Redux Toolkit, secure storage, and REST API integrations."
     ],
     "tech": [
       "Next.js",
@@ -108,7 +200,7 @@ export const projects: Project[] = [
       "REST APIs",
       "Secure Storage"
     ],
-    "url": "https://www.celloperative.se/",
+    "url": workReferences.cell.url,
     "categories": [
       "web",
       "mobile"
@@ -120,14 +212,16 @@ export const projects: Project[] = [
       "TypeScript",
       "Next.js"
     ],
-    "scope": "Web + Mobile"
+    "scope": "Web + Mobile",
+    "linkLabel": "View public reference",
+    "linkNote": "The supplied public website is a reference for Cell Operative; it is not an authenticated inventory dashboard."
   },
   {
     "id": "visa",
     "title": "Online Visa System",
     "category": "Application workflows · Web development",
-    "role": "Full-stack development · Idanimo LLC",
-    "summary": "A dynamic online visa application system designed to let users apply without visiting embassies. Its flexible structure adapts to different countries’ visa requirements and integrates a PDF reader for document uploads and reviews.",
+    "role": "Application development · Idanimo LLC",
+    "summary": "A configurable online visa application system that adapts to different countries’ requirements. My work combined application workflows with PDF viewing and document handling.",
     "contributions": [
       "Developed the online visa application experience using Next.js, Server Actions, server-side rendering, and TypeScript.",
       "Built a flexible structure to accommodate differing visa requirements across countries using React Flow.",
@@ -142,7 +236,7 @@ export const projects: Project[] = [
       "Tailwind CSS",
       "PDF Integration"
     ],
-    "url": "https://visa.idnmo.com/",
+    "url": workReferences.visa.url,
     "categories": [
       "web"
     ],
@@ -178,48 +272,12 @@ export const projects: Project[] = [
       "mobile"
     ],
     "meta": "DIGITAL IDENTITY / MOBILE",
-    "short": "A mobile home for digitally signed documents, built with secure storage and a modern React Native foundation.",
+    "short": "A React Native wallet for digitally signed documents, with secure storage and modernized dependencies.",
     "tags": [
       "React Native",
       "Ethers",
       "Secure Storage"
     ],
     "scope": "Digital document wallet"
-  },
-  {
-    "id": "fitcoin",
-    "title": "Fitcoin",
-    "category": "Blockchain integration · Web & mobile",
-    "role": "Web3 front-end and mobile development · Aurora Solutions",
-    "summary": "A connected web and mobile ecosystem with blockchain functionality. My work focused on bringing the blockchain backend into the React web interface and extending that experience to a React Native app.",
-    "contributions": [
-      "Integrated blockchain functionality into the React web application’s front end.",
-      "Used Ethers, Web3Modal, Viem, and MetaMask to connect the user interface with blockchain functionality.",
-      "Extended the Fitcoin ecosystem through a React Native mobile app with corresponding blockchain integrations."
-    ],
-    "tech": [
-      "React",
-      "React Native",
-      "Redux Toolkit",
-      "Ethers",
-      "Web3Modal",
-      "Viem",
-      "MetaMask"
-    ],
-    "url": null,
-    "categories": [
-      "web",
-      "mobile",
-      "web3"
-    ],
-    "meta": "WEB3 / WEB + MOBILE",
-    "short": "Connecting React and React Native interfaces to blockchain functionality across the Fitcoin ecosystem.",
-    "tags": [
-      "React",
-      "React Native",
-      "Ethers",
-      "Viem"
-    ],
-    "scope": "Blockchain integration"
   }
 ];
