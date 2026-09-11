@@ -1,8 +1,11 @@
 import { test, expect } from "@playwright/test";
 import { handleContact } from "../lib/server/contact-handler";
+import { getSmtpConfig } from "../lib/server/smtp-config";
+import { smtpTransportOptions, type ContactMail, type SendContactMail } from "../lib/server/smtp-mailer";
 
 const origin = "https://portfolio.example.test";
-const config = { apiKey: "test-key", from: "Portfolio <sender@example.test>", to: "owner@example.test", siteUrl: origin };
+const smtp = { host: "smtp.gmail.com", port: 465 as const, user: "sender@example.test", password: "test-password", to: "owner@example.test" };
+const config = { smtp, siteUrl: origin };
 const submission = {
   name: "Test Visitor",
   email: "visitor@example.test",
@@ -20,28 +23,28 @@ function request(body: unknown = submission, headers: Record<string, string> = {
   });
 }
 
-const noDelivery: typeof fetch = async () => { throw new Error("Unexpected provider call"); };
+const noDelivery: SendContactMail = async () => { throw new Error("Unexpected provider call"); };
 
-test("delivery uses a fixed recipient and reply-to, with stable retry keys", async () => {
-  const messages: { key: string | null; body: Record<string, unknown> }[] = [];
-  const transport: typeof fetch = async (url, init) => {
-    expect(url).toBe("https://api.resend.com/emails");
-    messages.push({ key: new Headers(init?.headers).get("Idempotency-Key"), body: JSON.parse(String(init?.body)) });
-    return Response.json({ id: "test-receipt" });
+test("SMTP uses fixed addresses and safe reply-to, with stable message IDs", async () => {
+  const messages: ContactMail[] = [];
+  const transport: SendContactMail = async (settings, mail) => {
+    expect(settings).toEqual(smtp);
+    messages.push(mail);
+    return { accepted: [smtp.to] };
   };
-  const first = await handleContact(request({ ...submission, to: "untrusted@example.test" }), config, transport);
+  const first = await handleContact(request({ ...submission, to: "untrusted@example.test", from: "spoofed@example.test" }), config, transport);
   const retry = await handleContact(request(), config, transport);
   const changed = await handleContact(request({ ...submission, message: `${submission.message} Please call next week.` }), config, transport);
   expect(first.status).toBe(200);
   expect(await first.json()).toEqual({ ok: true });
   expect(retry.status).toBe(200);
   expect(changed.status).toBe(200);
-  expect(messages[0].body.to).toEqual([config.to]);
-  expect(messages[0].body.reply_to).toBe(submission.email);
-  expect(messages[0].body.from).toBe(config.from);
-  expect(messages[0].body).not.toHaveProperty("html");
-  expect(messages[0].key).toBe(messages[1].key);
-  expect(messages[0].key).not.toBe(messages[2].key);
+  expect(messages[0].to).toBe(smtp.to);
+  expect(messages[0].replyTo).toEqual({ name: submission.name, address: submission.email });
+  expect(messages[0].from.address).toBe(smtp.user);
+  expect(messages[0]).not.toHaveProperty("html");
+  expect(messages[0].messageId).toBe(messages[1].messageId);
+  expect(messages[0].messageId).not.toBe(messages[2].messageId);
   expect(first.headers.get("cache-control")).toBe("no-store");
 });
 
@@ -71,26 +74,48 @@ test("streamed body limits work without trusting Content-Length", async () => {
 });
 
 test("missing delivery configuration fails visibly", async () => {
-  const response = await handleContact(request(), { to: config.to }, noDelivery);
+  const response = await handleContact(request(), { smtp: null }, noDelivery);
   expect(response.status).toBe(503);
   expect(await response.json()).toMatchObject({ ok: false });
 });
 
-for (const providerStatus of [429, 500]) {
-  test(`provider ${providerStatus} responses never claim success or expose provider details`, async () => {
-    const transport: typeof fetch = async () => Response.json({ message: "private-provider-detail" }, { status: providerStatus });
+for (const responseCode of [421, 454, 535, 550]) {
+  test(`SMTP ${responseCode} never claims success or exposes server details`, async () => {
+    const transport: SendContactMail = async () => { throw Object.assign(new Error("private-provider-detail"), { responseCode }); };
     const response = await handleContact(request(), config, transport);
-    expect(response.status).toBe(providerStatus === 429 ? 429 : 502);
-    if (providerStatus === 429) expect(response.headers.get("retry-after")).toBe("60");
+    expect(response.status).toBe(responseCode < 500 ? 503 : 502);
+    if (responseCode < 500) expect(response.headers.get("retry-after")).toBe("60");
     const result = await response.text();
     expect(result).not.toContain("private-provider-detail");
     expect(JSON.parse(result).ok).toBe(false);
   });
 }
 
-test("network failures and invalid receipts retain an unconfirmed result", async () => {
-  const failedTransport: typeof fetch = async () => { throw new DOMException("Timed out", "TimeoutError"); };
-  const invalidReceipt: typeof fetch = async () => Response.json({ accepted: true });
+test("network failures and rejected recipients retain an unconfirmed result", async () => {
+  const failedTransport: SendContactMail = async () => { throw new DOMException("Timed out", "TimeoutError"); };
+  const rejectedRecipient: SendContactMail = async () => ({ accepted: [] });
+  const wrongRecipient: SendContactMail = async () => ({ accepted: ["somebody@example.test"] });
   expect((await handleContact(request(), config, failedTransport)).status).toBe(502);
-  expect((await handleContact(request(), config, invalidReceipt)).status).toBe(502);
+  expect((await handleContact(request(), config, rejectedRecipient)).status).toBe(502);
+  expect((await handleContact(request(), config, wrongRecipient)).status).toBe(502);
+});
+
+test("SMTP config normalizes Google app passwords and rejects unsafe configuration", () => {
+  const env = { SMTP_USER: "owner@gmail.com", SMTP_PASS: "abcd efgh\u00a0ijkl mnop" };
+  expect(getSmtpConfig(env)).toMatchObject({ host: "smtp.gmail.com", port: 465, user: env.SMTP_USER, password: "abcdefghijklmnop" });
+  expect(getSmtpConfig({ ...env, SMTP_PORT: "587" })?.port).toBe(587);
+  for (const overrides of [{ SMTP_PASS: "  " }, { SMTP_PORT: "25" }, { SMTP_PORT: "invalid" }, { SMTP_HOST: "smtp://gmail.com" }, { SMTP_USER: "invalid" }, { CONTACT_TO_EMAIL: "one@example.test,two@example.test" }]) {
+    expect(getSmtpConfig({ ...env, ...overrides })).toBeNull();
+  }
+  expect(getSmtpConfig({ ...env, SMTP_HOST: "smtp.example.test", SMTP_PASS: "password with spaces" })?.password).toBe("password with spaces");
+});
+
+test("SMTP enforces TLS for both submission ports and bounded connection timeouts", () => {
+  const implicitTLS = smtpTransportOptions(smtp);
+  expect(implicitTLS).toMatchObject({ secure: true, auth: { user: smtp.user, pass: smtp.password }, tls: { minVersion: "TLSv1.2", rejectUnauthorized: true }, disableFileAccess: true, disableUrlAccess: true, logger: false, debug: false });
+  expect(smtpTransportOptions({ ...smtp, port: 587 })).toMatchObject({ secure: false, requireTLS: true });
+  for (const timeout of [implicitTLS.dnsTimeout, implicitTLS.connectionTimeout, implicitTLS.greetingTimeout, implicitTLS.socketTimeout]) {
+    expect(timeout).toBeGreaterThan(0);
+    expect(timeout).toBeLessThanOrEqual(10000);
+  }
 });

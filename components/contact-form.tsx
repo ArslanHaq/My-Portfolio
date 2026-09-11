@@ -43,7 +43,7 @@ export function ContactForm({ enabled }: { enabled: boolean }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...parsed.data, website: values.website, submissionId: submission.current.id }),
-        signal: AbortSignal.timeout(15_000),
+        signal: AbortSignal.timeout(35_000),
       });
       const result: unknown = await response.json();
       if (!isContactResult(result)) throw new Error("Unrecognized form response");

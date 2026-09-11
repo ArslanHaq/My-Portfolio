@@ -2,6 +2,7 @@ import { profile } from "@/lib/site";
 import { ContactForm } from "./contact-form";
 import { CopyEmailButton } from "./copy-email-button";
 import { Icon } from "./icon";
+import { getSmtpConfig } from "@/lib/server/smtp-config";
 
 const socialLinks = [
   { label: "LinkedIn", detail: "Background & experience", href: profile.linkedin, mark: "in" },
@@ -10,7 +11,7 @@ const socialLinks = [
 ];
 
 export function Contact() {
-  const enabled = Boolean(process.env.RESEND_API_KEY && process.env.CONTACT_FROM_EMAIL);
+  const enabled = getSmtpConfig() !== null;
 
   return (
     <section className="section contact" id="contact" data-nav="" aria-labelledby="contact-title">

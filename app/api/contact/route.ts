@@ -1,14 +1,13 @@
 import { handleContact } from "@/lib/server/contact-handler";
-import { getSiteUrl, profile } from "@/lib/site";
+import { getSiteUrl } from "@/lib/site";
+import { getSmtpConfig } from "@/lib/server/smtp-config";
 
 export const runtime = "nodejs";
-export const maxDuration = 15;
+export const maxDuration = 30;
 
 export async function POST(request: Request) {
   return handleContact(request, {
-    apiKey: process.env.RESEND_API_KEY,
-    from: process.env.CONTACT_FROM_EMAIL,
-    to: process.env.CONTACT_TO_EMAIL || profile.email,
+    smtp: getSmtpConfig(),
     siteUrl: getSiteUrl(),
   });
 }

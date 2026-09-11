@@ -22,6 +22,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+export function isEmailAddress(value: string): boolean {
+  return value.length <= contactLimits.email && /^[^\s@<>,;"\\]+@[^\s@<>,;"\\]+\.[^\s@<>,;"\\]+$/.test(value);
+}
+
 export function validateContact(value: unknown): { ok: true; data: ContactMessage } | { ok: false; errors: ContactErrors } {
   const input = isRecord(value) ? value : {};
   const text = (field: ContactField) => typeof input[field] === "string" ? input[field].trim() : "";
@@ -31,7 +35,7 @@ export function validateContact(value: unknown): { ok: true; data: ContactMessag
   const message = text("message");
   const errors: ContactErrors = {};
   if (name.length < 2 || name.length > contactLimits.name || /[\r\n\t]/.test(name)) errors.name = "Enter your name (2–80 characters).";
-  if (email.length > contactLimits.email || !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email)) errors.email = "Enter a valid email address.";
+  if (!isEmailAddress(email)) errors.email = "Enter a valid email address.";
   if (!topic) errors.topic = "Choose what you’d like to discuss.";
   if (message.length < contactLimits.minMessage || message.length > contactLimits.message || message.includes("\0")) errors.message = "Share a little more detail (20–4,000 characters).";
   if (Object.keys(errors).length || !topic) return { ok: false, errors };
