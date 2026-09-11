@@ -44,7 +44,7 @@ export function toggleTheme() {
   const next = themeSnapshot() === "dark" ? "light" : "dark";
   document.documentElement.dataset.theme = next;
   store("arsalan-theme", next);
-  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", next === "dark" ? "#0d0d12" : "#f3f1eb");
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", next === "dark" ? "#0c1119" : "#f5f6f8");
   window.dispatchEvent(new Event(eventName));
 }
 

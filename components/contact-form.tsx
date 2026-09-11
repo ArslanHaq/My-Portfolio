@@ -3,13 +3,16 @@
 import { useRef, useState, useSyncExternalStore, type FormEvent } from "react";
 import { contactLimits, contactTopics, isContactResult, validateContact, type ContactErrors } from "@/lib/contact";
 import { profile } from "@/lib/site";
+import { useContactAvailability } from "@/lib/use-contact-availability";
 import { Icon } from "./icon";
 
 const subscribeHydration = () => () => {};
 const clientReady = () => true;
 const serverReady = () => false;
 
-export function ContactForm({ enabled }: { enabled: boolean }) {
+export function ContactForm() {
+  const { container, availability, checkAvailability } = useContactAvailability();
+  const enabled = availability === "available";
   const hydrated = useSyncExternalStore(subscribeHydration, clientReady, serverReady);
   const [pending, setPending] = useState(false);
   const [errors, setErrors] = useState<ContactErrors>({});
@@ -67,16 +70,23 @@ export function ContactForm({ enabled }: { enabled: boolean }) {
   const fieldError = (field: keyof ContactErrors) => errors[field] && <p className="contact-field-error" id={`contact-${field}-error`}>{errors[field]}</p>;
 
   return (
-    <div className="contact-form-card" aria-labelledby="contact-form-title">
+    <div className="contact-form-card" ref={container} aria-labelledby="contact-form-title">
       <p className="contact-form-kicker mono">START A CONVERSATION</p>
       <h3 id="contact-form-title">Tell me what you have in mind.</h3>
       <p className="contact-form-intro">Share a few details and the best email to reach you.</p>
-      {!enabled && <p className="contact-form-notice">The form is currently unavailable. You can <a href={`mailto:${profile.email}`}>email me directly</a> or use the links alongside.</p>}
+      <div className="contact-availability" role="status" aria-live="polite">
+        {availability === "checking" && <p className="contact-form-notice">Checking the contact form…</p>}
+        {availability === "available" && <p className="contact-form-notice contact-form-ready"><Icon name="check" /> Ready for your message.</p>}
+        {(availability === "unavailable" || availability === "error") && <p className="contact-form-notice">
+          {availability === "unavailable" ? "The form is currently unavailable. " : "The contact form couldn’t connect. "}
+          You can <a href={`mailto:${profile.email}`}>email me directly</a> or <button type="button" onClick={() => void checkAvailability()}>try again</button>.
+        </p>}
+      </div>
       <noscript>
-        <style>{".contact-form-fields{display:none!important}"}</style>
+        <style>{".contact-form-fields,.contact-availability{display:none!important}"}</style>
         <p className="contact-form-notice">To get in touch without JavaScript, <a href={`mailto:${profile.email}`}>send me an email</a>.</p>
       </noscript>
-      <form className="contact-form-fields" data-configured={enabled} data-ready={hydrated} action="/api/contact" method="post" onSubmit={submit} noValidate aria-busy={pending}>
+      <form className="contact-form-fields" data-configured={enabled} data-availability={availability} data-ready={hydrated} action="/api/contact" method="post" onSubmit={submit} noValidate aria-busy={pending || availability === "checking"}>
         <fieldset disabled={pending || !enabled || !hydrated}>
           <legend className="sr-only">Your contact details and enquiry</legend>
           <div className="contact-field-pair">

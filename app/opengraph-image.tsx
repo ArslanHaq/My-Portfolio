@@ -6,16 +6,16 @@ export const contentType = "image/png";
 
 export default function Image() {
   return new ImageResponse(
-    <div style={{ width: "100%", height: "100%", background: "#0b0d0c", color: "#f3f4ed", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "60px 72px", fontFamily: "sans-serif" }}>
+    <div style={{ width: "100%", height: "100%", background: "#0c1119", color: "#ffffff", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "60px 72px", fontFamily: "sans-serif" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 23 }}>
-        <span style={{ color: "#c2f36b" }}>arsalan.dev</span>
-        <span style={{ fontSize: 16, color: "#a5aaa0", letterSpacing: "3px" }}>WEB / MOBILE / AI / CLOUD</span>
+        <span style={{ color: "#ff5f56" }}>Muhammad Arsalan</span>
+        <span style={{ fontSize: 16, color: "#b0bac9", letterSpacing: "3px" }}>WEB / MOBILE / AI / CLOUD</span>
       </div>
       <div style={{ display: "flex", flexDirection: "column", fontSize: 86, letterSpacing: "-4px", lineHeight: 1.08 }}>
-        <span>Complex ideas.</span><span>Thoughtfully</span><span style={{ color: "#c2f36b" }}>engineered.</span>
+        <span>Ideas into</span><span>digital</span><span style={{ color: "#ff5f56" }}>experiences.</span>
       </div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid #30372c", paddingTop: "22px", fontSize: 21 }}>
-        <span>Muhammad Arsalan</span><span style={{ color: "#a5aaa0" }}>Full-Stack Developer · Islamabad</span>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid #272e35", paddingTop: "22px", fontSize: 21 }}>
+        <span>Muhammad Arsalan</span><span style={{ color: "#b0bac9" }}>Full-Stack Developer · Islamabad</span>
       </div>
     </div>,
     { ...size },

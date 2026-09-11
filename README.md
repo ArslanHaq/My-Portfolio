@@ -1,6 +1,6 @@
 # Muhammad Arsalan — Portfolio
 
-Next.js App Router, React, TypeScript, and a charcoal, lime, and lavender interface. This application lives in `My-Portfolio/` when opened from the parent workspace. Run commands in the directory containing this README and `package.json`.
+Next.js App Router, React, TypeScript, and a dark navy and coral interface inspired by the supplied Fitcoin reference. This application lives in `My-Portfolio/` when opened from the parent workspace. Run commands in the directory containing this README and `package.json`.
 
 ## Run locally
 
@@ -23,14 +23,12 @@ The local sandbox previously prevented Turbopack's CSS worker from binding a por
 ## Design and motion
 
 - Server-rendered headings, biography, skills, employment, contact details, and media captions.
-- An optional Three.js hero sculpture with pointer response, a moving discipline strip, floating labels, section entrances, card hover treatments, and a contextual cursor.
+- A layered Fitcoin website preview uses the supplied presentation image, a floating code card, a moving discipline strip, section entrances, and card hover treatments. The preview is server-rendered, with reserved image dimensions and CSS transform motion; it has no WebGL, scene download, or hero render loop.
 - Header and footer motion controls share a persisted preference. The operating system's reduced-motion preference takes priority. The native cursor remains available.
-- The Three.js module loads dynamically during idle time on fine-pointer screens at least 900px wide. It is skipped for reduced motion, saved motion pause, data-saving mode, and devices reporting at most two logical processors. The CSS illustration remains available when WebGL is unsupported or loading fails.
-- The renderer caps pixel ratio at 1.25 and draws at most 30 frames per second. It suspends offscreen and in hidden tabs and releases geometry, materials, observers, event listeners, and its WebGL context on cleanup. No texture downloads, postprocessing, shadows, or React updates occur in its render loop.
-- Mobile uses two lightweight CSS transform animations for the orbital illustration and discipline strip. These also stop offscreen, when paused, or with reduced motion. Motion still has a rendering cost; these controls do not establish a zero-overhead claim.
+- The browser preview and discipline strip animate on mobile; the secondary code card stays still. Scoped loops pause offscreen and in hidden tabs. Motion still has a rendering cost; these controls do not establish a zero-overhead claim.
 - The cursor stops requesting animation frames when it settles, and hides over native media/form controls and during keyboard navigation.
 
-`app/globals.css` contains shared component and interface-illustration styles; `app/experience.css` contains the current visual direction and responsive motion treatment. `components/hero-scene.tsx` controls enhancement loading; `lib/orbit-scene.ts` owns the isolated Three.js renderer.
+`app/globals.css` contains shared component and interface-illustration styles; `app/experience.css` contains the current visual direction and responsive motion treatment. `components/hero.tsx` renders the work preview. Three.js and its type package have been removed.
 
 ## Media and SEO
 
@@ -61,7 +59,9 @@ In **Vercel → Project → Settings → Environment Variables**, add these valu
 
 No `SMTP_SECURE` variable is needed: encryption follows the selected port. The sender is always `SMTP_USER`, with the portfolio owner's display name. The visitor's validated name and email are used as Reply-To, so replying in Gmail addresses the visitor. The previous `RESEND_API_KEY` and `CONTACT_FROM_EMAIL` variables are no longer used and can be removed from Vercel. No custom email domain is required for this Gmail configuration.
 
-Never prefix SMTP credentials with `NEXT_PUBLIC_`. Keep the app password in private deployment settings or the ignored local environment file. Only a configuration-availability boolean reaches the form; credentials are never passed to the browser. The form is prerendered, so rebuild/redeploy after configuring SMTP.
+Never prefix SMTP credentials with `NEXT_PUBLIC_`. Keep the app password in private deployment settings or the ignored local environment file. `GET /api/contact` returns only a configuration-availability boolean with `Cache-Control: no-store`; credentials never reach the browser. The form checks this endpoint as it approaches the viewport, with checking, unavailable, connection-error, and retry states. This keeps the homepage static while reading the current deployment's server configuration at request time. The check does not connect to Gmail or prove inbox delivery.
+
+**After adding or updating environment variables in Vercel, redeploy the Production deployment.** Existing deployments retain their previous environment. Under Deployments, select the latest production deployment, choose Redeploy, and ensure the new deployment becomes Production. The old page's unavailable notice was computed at build time; the new runtime check removes that dependency. Visit `/api/contact` on the new deployment: `{ "available": true }` confirms the required configuration is present and valid, without exposing credentials. See [Vercel's environment variable documentation](https://vercel.com/docs/environment-variables).
 
 `POST /api/contact` accepts same-origin JSON, enforces a streaming 24 KiB body limit, validates fields, checks a honeypot, and sends plain text to a fixed server-configured recipient. Both the visible sender and SMTP envelope use the configured account. It cannot act as an arbitrary recipient relay. TLS certificate verification stays enabled; port 587 must upgrade to TLS. Connection/DNS/greeting/socket timeouts are bounded, and the route awaits SMTP completion before responding. A fresh non-pooled transporter is used for each enquiry, with no retained queue or warm-instance state.
 
@@ -89,7 +89,11 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-Browser tests cover navigation, themes, project filters/dialogs, resume downloads, responsive image rendering, on-demand video playback, cursor behavior, motion preferences, WebGL lifecycle, and no-JavaScript content. Contact API tests inject a mock mail sender and validate TLS/configuration boundaries; enabled-form browser tests intercept the endpoint and never send actual email. Run the enabled-form tests against an isolated preview configured with dummy delivery variables; they skip when the ordinary preview has no email configuration.
+Browser tests cover navigation, themes, project filters/dialogs, resume downloads, responsive image rendering, on-demand video playback, cursor behavior, motion preferences, hero preview motion, and no-JavaScript content. Contact API tests inject a mock mail sender and validate TLS/configuration boundaries; form browser tests mock availability and delivery, and never send actual email. Availability tests also exercise connection failure, unavailable configuration, manual retry, and the uncached runtime endpoint.
+
+Fitcoin-theme and contact-availability verification (September 11, 2026): lint, TypeScript, and whitespace checks passed. The isolated Node 22 / Webpack build kept `/` static and `/api/contact` dynamic. It was built without SMTP variables, then started with dummy runtime variables; the readiness endpoint returned `{ "available": true }` and `Cache-Control: no-store`. The generated page used the production canonical URL, and no dummy SMTP password appeared in browser assets. Across the suite and one rerun after changing the hero test to scroll its stationary container, 50 distinct checks passed and three device-specific checks were skipped. Desktop, light-theme, mobile, and 320px layouts were inspected with no horizontal overflow or browser errors. All delivery tests used mocks; this work has not been deployed or tested for live inbox delivery.
+
+The total emitted browser JavaScript decreased from 1,511,377 to 954,117 bytes versus the prior SMTP build (430,777 to 292,849 bytes using gzip). This includes the removed optional Three.js chunks and is not a first-load transfer or Core Web Vitals measurement.
 
 SMTP migration verification: lint, TypeScript, and whitespace checks passed after correcting the injected environment type. An isolated Node 22 Webpack production build passed. All 17 targeted SMTP/API and desktop/mobile contact tests passed, with delivery mocked. A separate real Gmail SMTP verification confirmed the TLS connection and app-password authentication without sending mail. The local credential file is ignored and untracked; a dummy SMTP password was absent from the built static browser assets. Actual message delivery and the updated Vercel deployment remain unverified.
 

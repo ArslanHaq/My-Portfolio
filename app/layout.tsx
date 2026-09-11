@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   },
   twitter: { card: "summary_large_image", title: siteTitle, description: siteDescription },
 };
-export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#0d0d12" };
+export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#0c1119" };
 
 // Fixed, trusted initialization script: applies stored preferences before the first paint.
 const preferencesScript = `(function(){var r=document.documentElement;try{r.dataset.theme=localStorage.getItem('arsalan-theme')==='light'?'light':'dark';r.classList.toggle('motion-paused',localStorage.getItem('arsalan-motion')==='paused'||matchMedia('(prefers-reduced-motion: reduce)').matches)}catch(e){r.dataset.theme='dark';r.classList.toggle('motion-paused',matchMedia('(prefers-reduced-motion: reduce)').matches)}})();`;

@@ -11,17 +11,17 @@ test("contact details and social links are correct and responsive", async ({ pag
   await expect(contact).toContainText("Based in Islamabad, Pakistan");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
   const send = contact.getByRole("button", { name: "Send message", exact: true });
+  await expect(contact.locator("form")).not.toHaveAttribute("data-availability", "checking");
   if (await send.isDisabled()) await expect(contact).toContainText("The form is currently unavailable.");
 });
 
 test("contact form validates, retains failed messages, and confirms accepted submissions", async ({ page }) => {
-  await page.goto("/", { waitUntil: "domcontentloaded" });
-  const form = page.locator(".contact-form-fields");
-  const send = form.getByRole("button", { name: "Send message", exact: true });
-  test.skip(await form.getAttribute("data-configured") !== "true", "Run against a preview with delivery configuration; requests are mocked.");
-  await expect(form).toHaveAttribute("data-ready", "true");
   const submissions: Record<string, unknown>[] = [];
   await page.route("**/api/contact", async route => {
+    if (route.request().method() === "GET") {
+      await route.fulfill({ json: { available: true } });
+      return;
+    }
     submissions.push(route.request().postDataJSON());
     if (submissions.length === 1) {
       await route.fulfill({ status: 502, contentType: "application/json", body: JSON.stringify({ ok: false, message: "Sending wasn’t confirmed. Please retry the same message." }) });
@@ -29,6 +29,12 @@ test("contact form validates, retains failed messages, and confirms accepted sub
       await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) });
     }
   });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  const form = page.locator(".contact-form-fields");
+  await form.scrollIntoViewIfNeeded();
+  const send = form.getByRole("button", { name: "Send message", exact: true });
+  await expect(form).toHaveAttribute("data-configured", "true");
+  await expect(form).toHaveAttribute("data-ready", "true");
   await send.click();
   await expect(form.getByLabel("Your name")).toBeFocused();
   await expect(page.locator("#contact-name-error")).toBeVisible();
@@ -46,4 +52,36 @@ test("contact form validates, retains failed messages, and confirms accepted sub
   await expect(form.getByLabel("Your message")).toHaveValue("");
   expect(submissions).toHaveLength(2);
   expect(submissions[0].submissionId).toBe(submissions[1].submissionId);
+});
+
+test("availability is checked near the form and recovers through manual retry", async ({ page }) => {
+  let checks = 0;
+  await page.route("**/api/contact", async route => {
+    expect(route.request().method()).toBe("GET");
+    checks++;
+    if (checks === 1) await route.abort("failed");
+    else await route.fulfill({ json: { available: checks > 2 } });
+  });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
+  expect(checks).toBe(0);
+  const form = page.locator(".contact-form-fields");
+  await form.scrollIntoViewIfNeeded();
+  await expect(form).toHaveAttribute("data-availability", "error");
+  await expect(form.getByRole("button", { name: "Send message", exact: true })).toBeDisabled();
+  await page.getByRole("button", { name: "try again", exact: true }).click();
+  await expect(form).toHaveAttribute("data-availability", "unavailable");
+  await expect(page.locator(".contact-availability")).toContainText("The form is currently unavailable.");
+  await page.getByRole("button", { name: "try again", exact: true }).click();
+  await expect(form).toHaveAttribute("data-availability", "available");
+  await expect(form.getByRole("button", { name: "Send message", exact: true })).toBeEnabled();
+  expect(checks).toBe(3);
+});
+
+test("runtime availability is uncached and only returns a boolean", async ({ request }) => {
+  const response = await request.get("/api/contact");
+  expect(response.status()).toBe(200);
+  expect(response.headers()["cache-control"]).toContain("no-store");
+  const result = await response.json();
+  expect(Object.keys(result)).toEqual(["available"]);
+  expect(typeof result.available).toBe("boolean");
 });

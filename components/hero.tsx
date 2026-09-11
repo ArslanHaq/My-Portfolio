@@ -1,5 +1,5 @@
 import { Icon } from "./icon";
-import { HeroScene } from "./hero-scene";
+import Image from "next/image";
 
 const disciplines = ["Frontend craft", "Full-stack engineering", "Mobile experiences", "AI integrations"];
 
@@ -9,7 +9,7 @@ export function Hero() {
       <div className="wrap hero-grid">
         <div className="hero-copy">
           <p className="hero-eyebrow mono"><span className="dot" /> MUHAMMAD ARSALAN UL HAQ</p>
-          <h1 id="hero-title">I build<br /><span className="hero-title-accent">digital<svg viewBox="0 0 320 18" fill="none" aria-hidden="true"><path d="M3 13C83 1 207 1 315 8" /></svg></span><br />experiences<span className="hero-period">.</span></h1>
+          <h1 id="hero-title">I build<br /><span className="hero-title-accent">digital</span><br />experiences<span className="hero-period">.</span></h1>
           <p className="hero-description">A full-stack developer with a frontend obsession.<br />Turning complex ideas into <strong>web, mobile, and AI products</strong> that feel effortless.</p>
           <div className="hero-buttons">
             <a className="button button-primary" href="#work">Explore my work <Icon name="arrow-up-right" /></a>
@@ -18,18 +18,24 @@ export function Hero() {
           <div className="hero-footnote mono"><Icon name="pin" /> ISLAMABAD, PAKISTAN <span className="sep" /> BUILDING SINCE 2022</div>
         </div>
         <div className="hero-composition" data-motion-scope="">
-          <div className="scene-grid" aria-hidden="true" />
-          <div className="scene-caption mono"><span className="scene-cross">+</span> CREATIVE MIND. ENGINEERING CORE.</div>
-          <HeroScene />
-          <div className="scene-coordinate mono" aria-hidden="true">33.6844° N<br />73.0479° E</div>
-          <div className="scene-tag scene-tag-web"><Icon name="code" /><span>Thoughtful interfaces<small>React / Next.js / TypeScript</small></span></div>
-          <div className="scene-tag scene-tag-ai"><Icon name="sparkle" /><span>A little intelligence.<small>A lot of possibility.</small></span></div>
-          <a className="hero-showreel-link" href="#showcase" data-cursor="PLAY">
+          <p className="hero-preview-label mono"><span /> FROM IDEA TO INTERFACE</p>
+          <div className="hero-preview-backdrop" aria-hidden="true" />
+          <a className="hero-browser" href="#showcase" data-cursor="VIEW" aria-label="Explore the Fitcoin website presentation and more of my work">
+            <div className="hero-browser-bar" aria-hidden="true"><span className="browser-dots"><i /><i /><i /></span><span>SELECTED WORK / FITCOIN</span><Icon name="arrow-up-right" /></div>
+            <div className="hero-preview-image">
+              <Image src="/media/custom-websites.webp" alt="Fitcoin website preview from my custom website presentation, with its fitness hero and coral call to action." width={1619} height={971} unoptimized loading="eager" fetchPriority="high" />
+            </div>
+          </a>
+          <div className="hero-code-card" aria-hidden="true">
+            <div className="hero-code-heading mono"><Icon name="code" /> THE DETAILS MATTER<span>TSX</span></div>
+            <code><span>const</span> experience = &#123;<br />&nbsp; design: <b>&apos;thoughtful&apos;</b>,<br />&nbsp; builtFor: <b>&apos;people&apos;</b><br />&#125;;</code>
+          </div>
+          <div className="hero-stack-card"><Icon name="react" /><span>Ideas into products.<small>Web · Mobile · AI</small></span></div>
+          <a className="hero-showreel-link" href="#showcase" data-cursor="VIEW">
             <span className="showreel-play" aria-hidden="true">↗</span>
-            <span>Proof, in motion.<small className="mono">WATCH THE SHOWREEL · 00:58</small></span>
+            <span>See the work in motion.<small className="mono">EXPLORE THE SHOWREEL · 00:58</small></span>
             <span className="reel-lines" aria-hidden="true"><i /><i /><i /><i /><i /></span>
           </a>
-          <p className="scene-hint mono"><span className="dot" /> IDEAS IN ORBIT <span>MOVE AROUND. EXPLORE.</span></p>
         </div>
       </div>
       <div className="discipline-band" data-motion-scope="" aria-label={disciplines.join(", ")}>

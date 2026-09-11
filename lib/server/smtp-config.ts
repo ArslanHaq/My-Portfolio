@@ -9,7 +9,7 @@ export type SmtpConfig = {
   to: string;
 };
 
-/** Shared by the server-rendered availability check and the POST handler. */
+/** Used only by the runtime availability and submission handlers. */
 export function getSmtpConfig(env: Readonly<Record<string, string | undefined>> = process.env): SmtpConfig | null {
   const host = (env.SMTP_HOST || "smtp.gmail.com").trim().toLowerCase();
   const port = Number(env.SMTP_PORT || "465");

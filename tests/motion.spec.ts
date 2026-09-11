@@ -54,7 +54,7 @@ test("reduced motion updates live and touch devices have no cursor effect", asyn
   if (testInfo.project.name === "mobile") {
     await page.mouse.move(150, 150);
     await expect(page.locator(".cursor-aura")).toHaveCSS("display", "none");
-    await expect(page.locator(".orbit-canvas")).toHaveCount(0);
+    await expect(page.locator("canvas")).toHaveCount(0);
   }
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(page.locator("html")).toHaveClass(/motion-paused/);

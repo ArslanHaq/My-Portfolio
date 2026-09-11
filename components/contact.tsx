@@ -2,7 +2,6 @@ import { profile } from "@/lib/site";
 import { ContactForm } from "./contact-form";
 import { CopyEmailButton } from "./copy-email-button";
 import { Icon } from "./icon";
-import { getSmtpConfig } from "@/lib/server/smtp-config";
 
 const socialLinks = [
   { label: "LinkedIn", detail: "Background & experience", href: profile.linkedin, mark: "in" },
@@ -11,8 +10,6 @@ const socialLinks = [
 ];
 
 export function Contact() {
-  const enabled = getSmtpConfig() !== null;
-
   return (
     <section className="section contact" id="contact" data-nav="" aria-labelledby="contact-title">
       <div className="wrap">
@@ -40,7 +37,7 @@ export function Contact() {
                 </a>)}
               </nav>
             </div>
-            <ContactForm enabled={enabled} />
+            <ContactForm />
           </div>
           <div className="contact-bottom">
             <div className="contact-location"><Icon name="pin" />Based in {profile.location}</div>
