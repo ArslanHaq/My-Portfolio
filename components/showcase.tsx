@@ -44,10 +44,14 @@ export function Showcase() {
           {showcaseImages.map((item, index) => (
             <figure className="showcase-card reveal" key={item.id}>
               <a className="showcase-image-link" href={item.src} target="_blank" rel="noopener noreferrer"
-                aria-label={`Open ${item.title} full image (opens in a new tab)`}>
+                data-cursor="VIEW" aria-label={`Open ${item.title} full image (opens in a new tab)`}>
+                <picture>
+                  <source srcSet={`/media/${item.id}-640.webp 640w, /media/${item.id}-960.webp 960w, ${item.src} 1619w`}
+                    sizes="(max-width: 760px) calc(100vw - 40px), (max-width: 1432px) calc((100vw - 142px) / 2), 645px" />
                 <Image src={item.src} alt={item.alt} width={item.width} height={item.height}
-                  sizes="(max-width: 760px) calc(100vw - 40px), (max-width: 960px) calc((100vw - 76px) / 2), (max-width: 1199px) calc((100vw - 120px) / 3), (max-width: 1392px) calc((100vw - 152px) / 3), 414px"
+                  unoptimized
                   className="showcase-image" />
+                </picture>
                 <span className="showcase-expand" aria-hidden="true"><Icon name="arrow-up-right" /></span>
               </a>
               <figcaption>

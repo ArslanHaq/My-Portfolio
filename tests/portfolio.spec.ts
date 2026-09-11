@@ -9,7 +9,7 @@ test("homepage has six projects and a responsive layout", async ({ page }) => {
   page.on("pageerror", error => errors.push(error.message));
   await page.goto("/");
   await expect(page).toHaveTitle(/Muhammad Arsalan/);
-  await expect(page.locator("h1")).toContainText("engineered.");
+  await expect(page.locator("h1")).toContainText("experiences");
   await expect(page.locator(".project-card:visible")).toHaveCount(6);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
   expect(errors).toEqual([]);
@@ -58,7 +58,7 @@ test("resume URL serves the original PDF", async ({ request }) => {
 test("resume button downloads a PDF", async ({ page }) => {
   await page.goto("/");
   const pending = page.waitForEvent("download");
-  await page.locator(".resume-nav").click();
+  await page.locator(".contact-resume").click();
   const download = await pending;
   expect(download.suggestedFilename()).toBe("Muhammad-Arsalan-Resume.pdf");
 });

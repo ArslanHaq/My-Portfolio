@@ -1,147 +1,86 @@
 # Muhammad Arsalan — Portfolio
 
-A personal portfolio built with **Next.js App Router, React, TypeScript, and Tailwind CSS**. The charcoal-and-lime design presents full-stack, mobile, cloud, AI, and Web3 experience.
+Next.js App Router, React, TypeScript, and a charcoal, lime, and lavender interface. This application lives in `My-Portfolio/` when opened from the parent workspace. Run commands in the directory containing this README and `package.json`.
 
-## Included
+## Run locally
 
-- Server-rendered hero, biography, technical skills, employment history, education, certifications, and contact sections.
-- Six project showcases, category filters, and keyboard-accessible project dialogs.
-- Light/dark themes with persisted preferences.
-- Responsive navigation, scroll effects, and reduced-motion support.
-- Original PDF resume, served directly from the public folder.
-- Five optimized presentation images and a 58-second, on-demand video showreel.
-- Page metadata, structured data, generated social-sharing artwork, sitemap, and robots configuration.
-- Email links and a copy-email button. No pretend contact form or unconfigured email backend.
-
-Project visuals are decorative interface concepts, not actual production screenshots. Project descriptions and supplied project links are based on the owner's resume. The GitHub profile points to the account supplied for this repository. No visitor tracking or analytics account is configured.
-
-## Publish without coding
-
-### 1. Upload to the existing GitHub repository
-
-Repository: `ArslanHaq/My-Portfolio`
-
-Extract the project ZIP on your computer. On the empty repository page, choose **uploading an existing file** (or **Add file → Upload files**). Drag the **contents of the extracted folder**, including the `app`, `components`, `data`, `lib`, `public`, and `tests` folders, onto the upload area. Keep the folder structure intact. Commit the files to `main`.
-
-`package.json` must be at the repository root, beside the `app` directory. Do not upload just the ZIP, and do not put the whole application inside an extra nested directory. Files beginning with a dot may be hidden by the operating system; include them when possible. They contain standard project configuration, not credentials. The app does not require `.env.example` to deploy.
-
-### 2. Import into Vercel
-
-Sign in to Vercel using your own account. Choose **Add New → Project**, grant access to `ArslanHaq/My-Portfolio`, and import that repository.
-
-Use these settings:
-
-| Setting | Value |
-| --- | --- |
-| Framework preset | Next.js |
-| Root directory | Repository root (`./`) |
-| Node.js | 22.x, also declared in `package.json` |
-| Install command | Default (`npm install`) |
-| Build command | Default (`npm run build`) |
-| Output directory | Leave the Next.js default |
-| Environment variables | None required |
-
-Click **Deploy**. Vercel will install the dependencies and run the first production build. After a successful deployment, use the website address displayed by Vercel. A successful repository upload is not itself a live deployment.
-
-## Resume download
-
-The original PDF is included at:
-
-```text
-public/resume/Muhammad-Arsalan-Resume.pdf
-```
-
-Every resume button links to:
-
-```text
-/resume/Muhammad-Arsalan-Resume.pdf
-```
-
-It is a normal public static file, not a base64 string, private endpoint, or generated replacement. On a deployed site, append that path to the actual site origin to access it. Anyone with that public URL can access the PDF and the contact information it contains.
-
-## Local development
-
-Node.js 22 is declared for the project.
+Use Node.js 22:
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-For a production build and server:
+For production:
 
 ```bash
 npm run build
 npm run start
 ```
 
-No API key, database, or GitHub token is required by the website.
+The local sandbox previously prevented Turbopack's CSS worker from binding a port. Webpack is supported as an alternative: `npm run build -- --webpack` or `npm run dev -- --webpack`. This is an environment workaround, not a change to the default deployment bundler.
 
-## Project layout
+## Design and motion
 
-```text
-app/                    Pages, layout, stylesheet, metadata, social image
-components/             Reusable server and client components
-data/projects.ts        Typed project content and supplied external links
-lib/site.ts             Profile details and deployed-origin resolution
-lib/preferences.ts      Browser-only theme/motion preference handling
-public/resume/          Original downloadable resume PDF
-tests/                  Playwright browser tests
-next.config.ts          Next.js and response-header configuration
-vercel.json             Vercel framework selection
-```
+- Server-rendered headings, biography, skills, employment, contact details, and media captions.
+- An optional Three.js hero sculpture with pointer response, a moving discipline strip, floating labels, section entrances, card hover treatments, and a contextual cursor.
+- Header and footer motion controls share a persisted preference. The operating system's reduced-motion preference takes priority. The native cursor remains available.
+- The Three.js module loads dynamically during idle time on fine-pointer screens at least 900px wide. It is skipped for reduced motion, saved motion pause, data-saving mode, and devices reporting at most two logical processors. The CSS illustration remains available when WebGL is unsupported or loading fails.
+- The renderer caps pixel ratio at 1.25 and draws at most 30 frames per second. It suspends offscreen and in hidden tabs and releases geometry, materials, observers, event listeners, and its WebGL context on cleanup. No texture downloads, postprocessing, shadows, or React updates occur in its render loop.
+- Mobile uses two lightweight CSS transform animations for the orbital illustration and discipline strip. These also stop offscreen, when paused, or with reduced motion. Motion still has a rendering cost; these controls do not establish a zero-overhead claim.
+- The cursor stops requesting animation frames when it settles, and hides over native media/form controls and during keyboard navigation.
 
-## Updating the portfolio
+`app/globals.css` contains shared component and interface-illustration styles; `app/experience.css` contains the current visual direction and responsive motion treatment. `components/hero-scene.tsx` controls enhancement loading; `lib/orbit-scene.ts` owns the isolated Three.js renderer.
 
-### Showcase media
+## Media and SEO
 
-`data/showcase.ts` contains the image descriptions and video metadata. The corresponding web-ready files live in `public/media/`. The five original 1619 × 971 PNG presentations were encoded as WebP at quality 85 without cropping; keep the source originals outside the deployed app. The 58-second showreel uses H.264/AAC at 1280 × 720 with MP4 fast-start metadata and a separate WebP poster.
+Five presentation images and a 58-second H.264/AAC showreel are served from `public/media/`. `data/showcase.ts` holds descriptions and dimensions. Presentations are WebP, with pre-generated 640px and 960px variants selected by a native `picture` source. The dimensioned, lazy-loaded `next/image` fallback is marked `unoptimized` because these files are already encoded; this avoids a runtime image-optimization roundtrip. Full images remain available from each presentation link.
 
-The showcase is a Server Component. Images use `next/image` with explicit dimensions, responsive `sizes`, and default lazy loading. The native video uses `preload="none"`, inline playback, and user controls. No autoplay, third-party video embed, or gallery library is needed. Opening an image displays the full presentation. Visible captions identify prototypes and mobile UI concepts.
+The original five WebP presentations total 656,344 bytes compared with 8,160,394 PNG source bytes. The MP4 is 5,372,730 bytes compared with 11,404,659 source bytes. Responsive variants reduce transfers further where the browser selects a smaller source. Video uses `preload="none"`, native controls, and fast-start metadata; it does not autoplay.
 
-The image sitemap and gallery structured data use the configured production origin. Set `NEXT_PUBLIC_SITE_URL` to your public HTTPS origin for a custom domain; Vercel production URLs remain supported. Gallery video metadata describes the supplied clip, but no unverified upload date is supplied and video rich-result eligibility is not asserted. Set an accurate first-publication date before pursuing video rich results.
+The portfolio includes metadata, Person/ImageGallery structured data, social-sharing images, robots configuration, and an image sitemap. Set `NEXT_PUBLIC_SITE_URL` to the public HTTPS origin for your custom domain. Vercel-provided deployment URLs are supported. No localhost origin is saved in configuration. No unverified video upload date or rich-result eligibility is claimed.
 
-Edit project text and technologies in `data/projects.ts`. Profile links and the resume URL are in `lib/site.ts`. Biography and employment content are in the corresponding section components. Replace the PDF at its existing path to keep the download links unchanged.
+Project text and links live in `data/projects.ts`. Their decorative interface illustrations are identified as illustrations. User-supplied gallery presentations are separately captioned, including prototypes and mobile concepts. Profile details, LinkedIn, GitHub, Fiverr, phone, and resume links are centralized in `lib/site.ts`.
 
-A custom domain is optional. On Vercel, production-origin metadata uses the platform-provided URL. Set `NEXT_PUBLIC_SITE_URL` to a full `https://` origin when using a custom domain. This variable is a public website address, not a secret.
+## Contact form
+
+The form collects a name, reply email, enquiry type, and message. It provides validation, pending, success, and failure states, preserves failed submissions, and waits for hydration before enabling submission. Without JavaScript or email configuration, visitors can use direct contact links.
+
+To enable email delivery, configure server-side environment variables from `.env.example` in an ignored `.env.local` file or the deployment provider's secret settings, then rebuild/redeploy:
+
+| Variable | Purpose |
+| --- | --- |
+| `RESEND_API_KEY` | Sending key from your Resend account |
+| `CONTACT_FROM_EMAIL` | A sender on a domain verified in Resend, e.g. `Portfolio <portfolio@your-domain.com>` |
+| `CONTACT_TO_EMAIL` | Your inbox; defaults to the portfolio's existing email |
+| `NEXT_PUBLIC_SITE_URL` | Public website origin for canonical metadata and origin validation |
+
+Never prefix email credentials with `NEXT_PUBLIC_`. No credentials are included in this repository, and no real email delivery was exercised during development.
+
+`POST /api/contact` accepts same-origin JSON, enforces a streaming 24 KiB body limit, validates fields, checks a honeypot, and sends plain text to a fixed server-configured recipient. It cannot act as an arbitrary recipient relay. Provider errors are sanitized; timeouts and provider throttling produce actionable form errors. Content-derived idempotency keys keep retries of the same submission stable across server instances. A successful response means the provider accepted the request; it does not guarantee inbox delivery.
+
+Before enabling a public form, configure a deployment firewall rate limit for `POST /api/contact` (for example, five requests per IP per ten minutes, adjusted for your traffic). The honeypot and provider quota are not a distributed per-visitor rate limiter. No unbounded in-memory rate-limit map or database has been added.
+
+Provider contracts: [Resend sending API](https://resend.com/docs/api-reference/emails/send-email) and [idempotency keys](https://resend.com/docs/dashboard/emails/idempotency-keys).
+
+## Deploy
+
+Import `ArslanHaq/My-Portfolio` into Vercel. Use Next.js, Node.js 22, the repository root containing `package.json`, and the default build/output settings. The website can render without email credentials; the form remains unavailable until configured. No analytics account is configured.
+
+The original downloadable resume is `public/resume/Muhammad-Arsalan-Resume.pdf`. Its public URL is `/resume/Muhammad-Arsalan-Resume.pdf`.
 
 ## Verification
 
-### Motion and cursor
-
-The desktop cursor halo keeps the native pointer visible and uses a single animation frame at a time to update its position directly, without React state updates on pointer movement. It stops requesting frames after settling, and hides during keyboard navigation, over native media/form controls, when scrolling, and when the window loses focus. It is disabled for touch pointers and reduced motion.
-
-Project and presentation cards enter once using opacity and translation, with short staggered delays. Desktop hover treatments add a small card lift, image zoom, navigation underline, and button sheen. The existing Pause motion preference controls all these effects. Decorative hero and waveform loops pause outside the viewport or in hidden tabs. Scroll progress caches the scrollable height and refreshes it when the layout changes. No runtime dependency was added.
-
-Lint and TypeScript passed. Across the focused browser run and one corrected no-JavaScript check, 17 checks passed and three device-specific cases were skipped. Checks covered cursor positioning, zero cursor style updates during a 250 ms idle sample after settling, native cursor/input preservation, offscreen pausing, live reduced-motion changes, touch behavior, saved motion preferences, server-rendered visibility, navigation, filtering, dialogs, and themes. The no-JavaScript check waits for document rendering independently of pending media requests. These checks used the existing Webpack development preview; the previously recorded media-loading and production-build limits below remain unresolved. No live Core Web Vitals or zero-overhead claim is made.
-
-Motion-related files: `components/cursor-aura.tsx`, `components/scroll-effects.tsx`, `components/hero.tsx`, `components/project-artwork.tsx`, `components/projects.tsx`, `components/showcase.tsx`, `app/page.tsx`, `app/globals.css`, and `tests/motion.spec.ts`.
-
-### Media integration
-
-Media integration checks on September 11, 2026:
-
-- ESLint passed after escaping the existing literal apostrophes in the hero's code illustration.
-- TypeScript passed.
-- The development preview served the homepage and image sitemap successfully, and the rendered Person and ImageGallery JSON-LD used the configured local test origin.
-- The desktop/mobile Playwright run finished with 18 passing checks, one intentionally skipped desktop-only navigation check, and one failing desktop image-loading check. The single failing check was retried once with a 15-second allowance and remained unsuccessful. Its optimized image requests stayed pending; direct requests to those same image URLs returned HTTP 200, and the mobile image test passed. Desktop image rendering remains unresolved.
-- Video playback passed on desktop and mobile, with no MP4 requests before play and HTTP 206 byte-range responses for seeking. The MP4 metadata precedes the media data for fast-start playback.
-- The five presentation assets total 656,344 bytes versus 8,160,394 original PNG bytes (approximately 92% smaller). The video is 5,372,730 bytes versus 11,404,659 original bytes (approximately 53% smaller).
-- The default Turbopack production build failed because its CSS worker could not bind a local port (`Operation not permitted (os error 1)`). A retry with Node 22 and elevated execution encountered the same restriction. No further production-build retries were made. Browser checks used a Webpack development preview and do not establish production readiness or live Core Web Vitals.
-
-A lockfile is included for reproducible installs. Use Node.js 22 and run:
-
 ```bash
-npm ci
-npm run typecheck
 npm run lint
+npm run typecheck
 npm run build
 npx playwright install chromium
 npm run test:e2e
 ```
 
-The local preview used `NEXT_PUBLIC_SITE_URL=http://127.0.0.1:3000` only as a process environment variable. Use the real production origin when deploying. No localhost domain was saved to the application configuration.
+Browser tests cover navigation, themes, project filters/dialogs, resume downloads, responsive image rendering, on-demand video playback, cursor behavior, motion preferences, WebGL lifecycle, and no-JavaScript content. Contact API tests inject a mock transport; enabled-form browser tests intercept the endpoint and never send actual email. Run the enabled-form tests against an isolated preview configured with dummy delivery variables; they skip when the ordinary preview has no email configuration.
 
-## Security
+Final verification on September 11, 2026: lint, TypeScript, and whitespace checks passed; an isolated Node 22 / Next.js 16.3.4 Webpack production build passed. Across the browser/API suite and one targeted rerun after correcting test locators and viewport setup, 41 checks passed and four device-specific checks were skipped. The previous desktop gallery-loading failure is resolved by the static responsive sources. Desktop, mobile, light-theme, and 320px layouts were visually checked. Live email delivery and deployed Core Web Vitals remain unverified.
 
-Do not add access tokens, passwords, private keys, or personal account credentials to this repository, the frontend, or any `NEXT_PUBLIC_` variable. Publishing credentials belong in the hosting/provider account's secure connection settings, not in the portfolio code.
+Next.js and its ESLint configuration were patched to 16.3.4 after npm reported [a Next.js security advisory](https://github.com/advisories/GHSA-2xp9-vwfh-vxw4). The installation audit reported no remaining vulnerabilities. Local checks do not establish live Core Web Vitals or deployment/email delivery behavior.

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { BrandMark, Icon } from "./icon";
-import { toggleTheme, useTheme } from "@/lib/preferences";
+import { toggleTheme, useTheme, toggleMotion, usePausedMotion } from "@/lib/preferences";
 import { profile } from "@/lib/site";
 
 const links = [
@@ -18,6 +18,7 @@ export function Header() {
   const header = useRef<HTMLElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
   const theme = useTheme();
+  const paused = usePausedMotion();
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -72,6 +73,10 @@ export function Header() {
           ))}
         </nav>
         <div className="nav-actions">
+          <button className="header-motion js-only" id="header-motion-toggle" type="button" onClick={toggleMotion}
+            aria-label={paused ? "Enable website animations" : "Pause website animations"} aria-pressed={paused}>
+            <span className="motion-bars" aria-hidden="true"><i /><i /><i /></span><span>{paused ? "Motion off" : "Motion on"}</span>
+          </button>
           <button className="icon-button" id="theme-toggle" type="button" onClick={toggleTheme}
             aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}>
             <Icon name={theme === "dark" ? "sun" : "moon"} />

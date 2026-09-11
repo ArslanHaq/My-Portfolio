@@ -32,7 +32,8 @@ test("cursor follows the mouse, settles, and preserves native controls", async (
 test("scroll reveals preserve hover and stop offscreen loops", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "desktop", "Desktop motion only");
   await page.goto("/");
-  const artwork = page.locator(".stack-scene");
+  const artwork = page.locator(".discipline-track");
+  await artwork.scrollIntoViewIfNeeded();
   await expect(artwork).toHaveCSS("animation-play-state", "running");
   const card = page.locator("#project-cvvid");
   await card.scrollIntoViewIfNeeded();
@@ -53,7 +54,7 @@ test("reduced motion updates live and touch devices have no cursor effect", asyn
   if (testInfo.project.name === "mobile") {
     await page.mouse.move(150, 150);
     await expect(page.locator(".cursor-aura")).toHaveCSS("display", "none");
-    await expect(page.locator(".stack-scene")).toHaveCSS("animation-name", "none");
+    await expect(page.locator(".orbit-canvas")).toHaveCount(0);
   }
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(page.locator("html")).toHaveClass(/motion-paused/);

@@ -62,6 +62,11 @@ export function CursorAura() {
         const target = event.target instanceof Element ? event.target : null;
         blocked = !!target?.closest(nativeControls);
         cursor.dataset.active = String(!!target?.closest(interactive));
+        const label = target?.closest<HTMLElement>("[data-cursor]")?.dataset.cursor;
+        if (label) cursor.dataset.label = label;
+        else delete cursor.dataset.label;
+        const caption = cursor.querySelector<HTMLElement>(".cursor-aura-label");
+        if (caption) caption.dataset.label = label ?? "";
         if (blocked) hide();
       }
 
@@ -99,5 +104,5 @@ export function CursorAura() {
     return () => { detach(); pointer.removeEventListener("change", connect); };
   }, [paused]);
 
-  return <div className="cursor-aura" ref={aura} aria-hidden="true"><span className="cursor-aura-ring" /></div>;
+  return <div className="cursor-aura" ref={aura} aria-hidden="true"><span className="cursor-aura-ring" /><span className="cursor-aura-label" /></div>;
 }

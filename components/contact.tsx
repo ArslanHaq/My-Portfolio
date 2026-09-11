@@ -1,7 +1,52 @@
+import { profile } from "@/lib/site";
+import { ContactForm } from "./contact-form";
 import { CopyEmailButton } from "./copy-email-button";
+import { Icon } from "./icon";
+
+const socialLinks = [
+  { label: "LinkedIn", detail: "Background & experience", href: profile.linkedin, mark: "in" },
+  { label: "GitHub", detail: "Code & projects", href: profile.github, mark: "</>" },
+  { label: "Fiverr", detail: "Work with me", href: profile.fiverr, mark: "fi" },
+];
 
 export function Contact() {
+  const enabled = Boolean(process.env.RESEND_API_KEY && process.env.CONTACT_FROM_EMAIL);
+
   return (
-    <section className="section contact" id="contact" data-nav="" aria-labelledby="contact-title"><div className="wrap"><div className="contact-panel reveal"><div className="contact-top"><div><p className="section-kicker mono"><span className="index">04 /</span> LET’S BUILD SOMETHING GOOD</p><h2 id="contact-title">Have something<br />worth building?</h2></div><a className="contact-arrow" href="mailto:arslankhanhaq332@gmail.com?subject=Let%E2%80%99s%20build%20something" aria-label="Email Muhammad Arsalan"><svg className="icon" aria-hidden="true"><use href="#i-arrow-up-right" /></svg></a></div><p className="contact-copy">A product idea, a technical challenge, or a conversation about what comes next. Let’s make the introduction.</p><div className="email-row"><a className="email-link" href="mailto:arslankhanhaq332@gmail.com">arslankhanhaq332@gmail.com</a><CopyEmailButton /></div><p className="contact-note">The email link opens your email app. You can also copy the address.</p><div className="contact-bottom"><div className="contact-location"><svg className="icon" aria-hidden="true"><use href="#i-pin" /></svg>Based in Islamabad, Pakistan</div><div className="social-links"><a href="https://www.linkedin.com/in/muhammad-arsalan-ul-haq-47289a185/" target="_blank" rel="noopener noreferrer">LinkedIn <svg className="icon" aria-hidden="true"><use href="#i-arrow-up-right" /></svg><span className="sr-only">Opens in a new tab</span></a><a href="https://github.com/ArslanHaq" target="_blank" rel="noopener noreferrer">GitHub <svg className="icon" aria-hidden="true"><use href="#i-arrow-up-right" /></svg><span className="sr-only">Opens in a new tab</span></a><a href="/resume/Muhammad-Arsalan-Resume.pdf" download="Muhammad-Arsalan-Resume.pdf">Resume <svg className="icon" aria-hidden="true"><use href="#i-download" /></svg></a></div></div></div></div></section>
+    <section className="section contact" id="contact" data-nav="" aria-labelledby="contact-title">
+      <div className="wrap">
+        <div className="contact-panel reveal">
+          <div className="contact-grid">
+            <div className="contact-introduction">
+              <p className="section-kicker mono"><span className="index">04 /</span> LET’S BUILD SOMETHING GOOD</p>
+              <h2 id="contact-title">Good things start<br />with a conversation.</h2>
+              <p className="contact-copy">A product idea, a technical challenge, or your next collaboration. Tell me what you’re thinking, and let’s explore what we can build together.</p>
+              <div className="contact-methods">
+                <div>
+                  <span className="contact-method-label mono">EMAIL ME</span>
+                  <div className="email-row"><a className="email-link" href={`mailto:${profile.email}`}>{profile.email}</a><CopyEmailButton /></div>
+                </div>
+                <div>
+                  <span className="contact-method-label mono">GIVE ME A CALL</span>
+                  <a className="contact-phone" href={`tel:${profile.phone}`}><Icon name="mobile" />{profile.phoneDisplay}<Icon name="arrow-up-right" /></a>
+                </div>
+              </div>
+              <nav className="contact-socials" aria-label="Connect with Muhammad Arsalan">
+                {socialLinks.map(link => <a href={link.href} key={link.label} target="_blank" rel="noopener noreferrer">
+                  <span className="contact-social-mark" aria-hidden="true">{link.mark}</span>
+                  <span><strong>{link.label}</strong><small>{link.detail}</small></span>
+                  <Icon name="arrow-up-right" /><span className="sr-only">Opens in a new tab</span>
+                </a>)}
+              </nav>
+            </div>
+            <ContactForm enabled={enabled} />
+          </div>
+          <div className="contact-bottom">
+            <div className="contact-location"><Icon name="pin" />Based in {profile.location}</div>
+            <a className="contact-resume" href={profile.resume} download="Muhammad-Arsalan-Resume.pdf">Download my resume <Icon name="download" /></a>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

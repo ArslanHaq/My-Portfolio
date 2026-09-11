@@ -3,8 +3,11 @@ export const profile = {
   title: "Full-Stack Developer",
   email: "arslankhanhaq332@gmail.com",
   location: "Islamabad, Pakistan",
+  phone: "+923093244976",
+  phoneDisplay: "0309 3244976",
   github: "https://github.com/ArslanHaq",
-  linkedin: "https://www.linkedin.com/in/muhammad-arsalan-ul-haq-47289a185/",
+  linkedin: "https://www.linkedin.com/in/muhammadarsalanulhaq/",
+  fiverr: "https://www.fiverr.com/s/50rr0vb",
   resume: "/resume/Muhammad-Arsalan-Resume.pdf",
 };
 
