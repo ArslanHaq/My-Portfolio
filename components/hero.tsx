@@ -10,7 +10,7 @@ export function Hero() {
 <a className="hero-showreel-link" href="#showcase"><span className="hero-play-mark" aria-hidden="true">▶</span> Watch the showreel <span className="mono">00:58</span></a>
 <div className="hero-footnote mono"><svg className="icon" aria-hidden="true"><use href="#i-pin" /></svg><span>Islamabad, Pakistan</span><span className="sep" /><span>Engineering since 2022</span></div>
 </div>
-<div className="hero-art" aria-hidden="true">
+<div className="hero-art" data-motion-scope="" aria-hidden="true">
 <div className="art-grid" /><div className="art-glow" /><div className="art-ring" /><div className="art-label mono">BUILT ACROSS THE STACK</div>
 <div className="stack-scene">
 <div className="stack-card stack-bottom"><div className="mini-code mono"><span className="purple">const</span> experience = &#123;<br />  interface: <span className="lime">&apos;thoughtful&apos;</span>,<br />  foundation: <span className="lime">&apos;scalable&apos;</span>,<br />  possibilities: <span className="lime">&apos;endless&apos;</span><br />&#125;;</div></div>

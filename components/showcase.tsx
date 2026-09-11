@@ -15,7 +15,7 @@ export function Showcase() {
         </div>
 
         <div className="showcase-grid">
-          <article className="showreel-card" aria-labelledby="showreel-title">
+          <article className="showreel-card reveal" aria-labelledby="showreel-title">
             <div className="showreel-heading">
               <span className="mono"><span className="dot" /> THE SHOWREEL</span>
               <span className="showreel-duration mono">00:58</span>
@@ -42,7 +42,7 @@ export function Showcase() {
           </article>
 
           {showcaseImages.map((item, index) => (
-            <figure className="showcase-card" key={item.id}>
+            <figure className="showcase-card reveal" key={item.id}>
               <a className="showcase-image-link" href={item.src} target="_blank" rel="noopener noreferrer"
                 aria-label={`Open ${item.title} full image (opens in a new tab)`}>
                 <Image src={item.src} alt={item.alt} width={item.width} height={item.height}

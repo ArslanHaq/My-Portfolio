@@ -107,6 +107,18 @@ A custom domain is optional. On Vercel, production-origin metadata uses the plat
 
 ## Verification
 
+### Motion and cursor
+
+The desktop cursor halo keeps the native pointer visible and uses a single animation frame at a time to update its position directly, without React state updates on pointer movement. It stops requesting frames after settling, and hides during keyboard navigation, over native media/form controls, when scrolling, and when the window loses focus. It is disabled for touch pointers and reduced motion.
+
+Project and presentation cards enter once using opacity and translation, with short staggered delays. Desktop hover treatments add a small card lift, image zoom, navigation underline, and button sheen. The existing Pause motion preference controls all these effects. Decorative hero and waveform loops pause outside the viewport or in hidden tabs. Scroll progress caches the scrollable height and refreshes it when the layout changes. No runtime dependency was added.
+
+Lint and TypeScript passed. Across the focused browser run and one corrected no-JavaScript check, 17 checks passed and three device-specific cases were skipped. Checks covered cursor positioning, zero cursor style updates during a 250 ms idle sample after settling, native cursor/input preservation, offscreen pausing, live reduced-motion changes, touch behavior, saved motion preferences, server-rendered visibility, navigation, filtering, dialogs, and themes. The no-JavaScript check waits for document rendering independently of pending media requests. These checks used the existing Webpack development preview; the previously recorded media-loading and production-build limits below remain unresolved. No live Core Web Vitals or zero-overhead claim is made.
+
+Motion-related files: `components/cursor-aura.tsx`, `components/scroll-effects.tsx`, `components/hero.tsx`, `components/project-artwork.tsx`, `components/projects.tsx`, `components/showcase.tsx`, `app/page.tsx`, `app/globals.css`, and `tests/motion.spec.ts`.
+
+### Media integration
+
 Media integration checks on September 11, 2026:
 
 - ESLint passed after escaping the existing literal apostrophes in the hero's code illustration.

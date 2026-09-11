@@ -54,7 +54,7 @@ export function Projects() {
         </div>
         <div className="projects-grid">
           {projects.map(project => (
-            <article className="project-card" key={project.id} id={`project-${project.id}`} hidden={!visible(project)}>
+            <article className="project-card reveal" key={project.id} id={`project-${project.id}`} hidden={!visible(project)}>
               <ProjectArtwork id={project.id} />
               <div className="project-content">
                 <div className="project-meta mono">{project.meta}</div>

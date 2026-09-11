@@ -8,6 +8,7 @@ import { Experience } from "@/components/experience";
 import { Contact } from "@/components/contact";
 import { Footer } from "@/components/footer";
 import { ScrollEffects } from "@/components/scroll-effects";
+import { CursorAura } from "@/components/cursor-aura";
 import { getSiteUrl, profile } from "@/lib/site";
 import { showcaseImages, showreel } from "@/data/showcase";
 
@@ -55,6 +56,7 @@ export default function Page() {
       {siteUrl && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(galleryData).replace(/</g, "\\u003c") }} />}
       <a className="skip-link" href="#main">Skip to content</a>
       <ScrollEffects />
+      <CursorAura />
       <Header />
       <main id="main">
         <Hero />
