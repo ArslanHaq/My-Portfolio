@@ -78,3 +78,45 @@ test("reduced motion and direct resume access are supported", async ({ page }) =
   await expect(page.locator("html")).toHaveClass(/motion-paused/);
   await expect(page.locator(".resume-nav")).toHaveAttribute("href", resumePath);
 });
+
+test("showcase images load at their natural ratio and open full presentations", async ({ page }) => {
+  await page.goto("/");
+  const images = page.locator(".showcase-image");
+  await expect(images).toHaveCount(5);
+  for (const image of await images.all()) {
+    await image.scrollIntoViewIfNeeded();
+    await expect.poll(() => image.evaluate(element => element instanceof HTMLImageElement && element.complete && element.naturalWidth > 0), { timeout: 15_000 }).toBe(true);
+    const box = await image.boundingBox();
+    expect(box!.width / box!.height).toBeCloseTo(1619 / 971, 1);
+  }
+  const presentation = page.locator(".showcase-image-link").first();
+  const popup = page.waitForEvent("popup");
+  await presentation.click();
+  const fullImage = await popup;
+  await fullImage.waitForLoadState();
+  expect(fullImage.url()).toContain("/media/custom-websites.webp");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
+});
+
+test("showreel loads only on play and supports seeking", async ({ page, request }) => {
+  const mediaRequests: string[] = [];
+  page.on("request", request => {
+    if (request.url().endsWith(".mp4")) mediaRequests.push(request.url());
+  });
+  await page.goto("/");
+  const video = page.locator(".showreel-video");
+  await video.scrollIntoViewIfNeeded();
+  await expect(video).toBeVisible();
+  expect(mediaRequests).toEqual([]);
+  await video.evaluate(async element => {
+    const player = element as HTMLVideoElement;
+    player.muted = true;
+    await player.play();
+  });
+  await expect.poll(() => video.evaluate(element => (element as HTMLVideoElement).currentTime)).toBeGreaterThan(0);
+  expect(mediaRequests.length).toBeGreaterThan(0);
+  expect(await video.evaluate(element => (element as HTMLVideoElement).duration)).toBeCloseTo(58, 0);
+  const range = await request.get("/media/portfolio-showreel.mp4", { headers: { Range: "bytes=0-1023" } });
+  expect(range.status()).toBe(206);
+  expect(range.headers()["content-type"]).toContain("video/mp4");
+});

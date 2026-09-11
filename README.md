@@ -9,6 +9,7 @@ A personal portfolio built with **Next.js App Router, React, TypeScript, and Tai
 - Light/dark themes with persisted preferences.
 - Responsive navigation, scroll effects, and reduced-motion support.
 - Original PDF resume, served directly from the public folder.
+- Five optimized presentation images and a 58-second, on-demand video showreel.
 - Page metadata, structured data, generated social-sharing artwork, sitemap, and robots configuration.
 - Email links and a copy-email button. No pretend contact form or unconfigured email backend.
 
@@ -92,30 +93,42 @@ vercel.json             Vercel framework selection
 
 ## Updating the portfolio
 
+### Showcase media
+
+`data/showcase.ts` contains the image descriptions and video metadata. The corresponding web-ready files live in `public/media/`. The five original 1619 × 971 PNG presentations were encoded as WebP at quality 85 without cropping; keep the source originals outside the deployed app. The 58-second showreel uses H.264/AAC at 1280 × 720 with MP4 fast-start metadata and a separate WebP poster.
+
+The showcase is a Server Component. Images use `next/image` with explicit dimensions, responsive `sizes`, and default lazy loading. The native video uses `preload="none"`, inline playback, and user controls. No autoplay, third-party video embed, or gallery library is needed. Opening an image displays the full presentation. Visible captions identify prototypes and mobile UI concepts.
+
+The image sitemap and gallery structured data use the configured production origin. Set `NEXT_PUBLIC_SITE_URL` to your public HTTPS origin for a custom domain; Vercel production URLs remain supported. Gallery video metadata describes the supplied clip, but no unverified upload date is supplied and video rich-result eligibility is not asserted. Set an accurate first-publication date before pursuing video rich results.
+
 Edit project text and technologies in `data/projects.ts`. Profile links and the resume URL are in `lib/site.ts`. Biography and employment content are in the corresponding section components. Replace the PDF at its existing path to keep the download links unchanged.
 
 A custom domain is optional. On Vercel, production-origin metadata uses the platform-provided URL. Set `NEXT_PUBLIC_SITE_URL` to a full `https://` origin when using a custom domain. This variable is a public website address, not a secret.
 
 ## Verification
 
-Checks performed when preparing this package:
+Media integration checks on September 11, 2026:
 
-- TypeScript/TSX and configuration syntax parsed successfully.
-- Local source imports were checked for missing files.
-- JSON and CSS syntax were checked.
-- The included PDF was verified byte-for-byte against the uploaded original.
-- The project was scanned for GitHub credential patterns; none were present.
+- ESLint passed after escaping the existing literal apostrophes in the hero's code illustration.
+- TypeScript passed.
+- The development preview served the homepage and image sitemap successfully, and the rendered Person and ImageGallery JSON-LD used the configured local test origin.
+- The desktop/mobile Playwright run finished with 18 passing checks, one intentionally skipped desktop-only navigation check, and one failing desktop image-loading check. The single failing check was retried once with a 15-second allowance and remained unsuccessful. Its optimized image requests stayed pending; direct requests to those same image URLs returned HTTP 200, and the mobile image test passed. Desktop image rendering remains unresolved.
+- Video playback passed on desktop and mobile, with no MP4 requests before play and HTTP 206 byte-range responses for seeking. The MP4 metadata precedes the media data for fast-start playback.
+- The five presentation assets total 656,344 bytes versus 8,160,394 original PNG bytes (approximately 92% smaller). The video is 5,372,730 bytes versus 11,404,659 original bytes (approximately 53% smaller).
+- The default Turbopack production build failed because its CSS worker could not bind a local port (`Operation not permitted (os error 1)`). A retry with Node 22 and elevated execution encountered the same restriction. No further production-build retries were made. Browser checks used a Webpack development preview and do not establish production readiness or live Core Web Vitals.
 
-**A full Next.js production build, semantic type check, dependency audit, and React browser tests were not executed in the preparation environment because external package installation was unavailable.** The source checks above are not a substitute for a successful production build. No lockfile is supplied; the initial install will create one, which should then be committed for reproducible subsequent installs.
-
-Browser tests are included for the home page, responsive layout, filters, project dialog, theme persistence, PDF download, mobile navigation, and reduced motion. To run them after dependency installation:
+A lockfile is included for reproducible installs. Use Node.js 22 and run:
 
 ```bash
+npm ci
 npm run typecheck
 npm run lint
+npm run build
 npx playwright install chromium
 npm run test:e2e
 ```
+
+The local preview used `NEXT_PUBLIC_SITE_URL=http://127.0.0.1:3000` only as a process environment variable. Use the real production origin when deploying. No localhost domain was saved to the application configuration.
 
 ## Security
 
