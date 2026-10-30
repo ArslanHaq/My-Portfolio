@@ -48,15 +48,20 @@ test("theme selection persists after reload", async ({ page }) => {
 
 test("project details keep unconfirmed roles and technologies out of the UI", async ({ page }) => {
   await page.goto("/");
-  for (const title of ["XcelTube", "Pherrix"]) {
-    await page.getByRole("button", { name: `Explore ${title}`, exact: true }).click();
-    const dialog = page.getByRole("dialog");
-    await expect(dialog.getByRole("heading", { name: "Interface highlights", exact: true })).toBeVisible();
-    await expect(dialog.locator(".dialog-role")).toHaveCount(0);
-    await expect(dialog.getByRole("heading", { name: "Technology", exact: true })).toHaveCount(0);
-    await expect(dialog.getByRole("link", { name: "Visit project" })).toHaveAttribute("href", /^https:\/\//);
-    await page.keyboard.press("Escape");
-  }
+  await page.getByRole("button", { name: "Explore Pherrix", exact: true }).click();
+  const pherrix = page.getByRole("dialog");
+  await expect(pherrix.getByRole("heading", { name: "Interface highlights", exact: true })).toBeVisible();
+  await expect(pherrix.locator(".dialog-role")).toHaveCount(0);
+  await expect(pherrix.getByRole("heading", { name: "Technology", exact: true })).toHaveCount(0);
+  await expect(pherrix.getByRole("link", { name: "Visit project" })).toHaveAttribute("href", /^https:\/\//);
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Explore XcelTube", exact: true }).click();
+  const xceltube = page.getByRole("dialog");
+  await expect(xceltube.getByRole("heading", { name: "What I built", exact: true })).toBeVisible();
+  await expect(xceltube.locator(".dialog-role")).toHaveText("Lead developer · Full stack");
+  await expect(xceltube.getByRole("heading", { name: "Technology", exact: true })).toBeVisible();
+  await expect(xceltube.getByRole("link", { name: "Visit project" })).toHaveAttribute("href", "https://www.xceltube.com/");
+  await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "Explore Fitcoin", exact: true }).click();
   await expect(page.getByRole("dialog")).toContainText("The linked Webflow website is a product showcase.");
   await expect(page.getByRole("dialog").getByRole("link", { name: "View Fitcoin showcase" })).toHaveAttribute("href", "https://fitcoin-client.webflow.io/");
