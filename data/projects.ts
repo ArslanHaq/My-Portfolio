@@ -24,6 +24,44 @@ export interface Project {
 /** Owner-supplied work descriptions. Unconfirmed roles and stacks stay absent. */
 export const projects: Project[] = [
   {
+    "id": "xceltube",
+    "title": "XcelTube",
+    "category": "AI tutor · Exam preparation platform",
+    "role": "Lead developer · Full stack",
+    "summary": "An exam-preparation platform for students in Pakistan, with video lectures, past papers, practice tests and an AI tutor. As lead developer I built most of the web app, the NestJS API and the admin panel.",
+    "contributions": [
+      "Built an AI tutor on Amazon Bedrock with streamed answers, maths rendering, and image and PDF understanding.",
+      "Added a voice tutor using Amazon Nova 2 Sonic speech-to-speech streaming, with live captions shown in Urdu script.",
+      "Made the tutor aware of the subject, chapter, lecture or past paper it is opened from, with study shortcuts, tutor personas and usage limits by plan.",
+      "Built courses, past papers, full-length mock tests, a practice-paper builder, quizzes and a leaderboard.",
+      "Added Easypaisa subscriptions, promo codes, referrals, Google sign-in, two-factor authentication and an admin panel."
+    ],
+    "detailHeading": "What I built",
+    "tech": [
+      "Next.js",
+      "NestJS",
+      "TypeScript",
+      "MongoDB",
+      "Amazon Bedrock",
+      "AWS S3",
+      "CloudFront",
+      "Firebase"
+    ],
+    "url": workReferences.xceltube.url,
+    "categories": [
+      "web"
+    ],
+    "meta": "AI TUTOR & EXAM PREP / FULL STACK",
+    "short": "Exam preparation with video lectures, past papers, practice tests and an AI tutor for chat, voice and uploads.",
+    "tags": [
+      "Next.js",
+      "NestJS",
+      "Amazon Bedrock",
+      "AI tutor"
+    ],
+    "scope": "Chat · Voice · Files"
+  },
+  {
     "id": "cvvid",
     "title": "CVVID",
     "category": "Video platform · Web development",
@@ -91,31 +129,6 @@ export const projects: Project[] = [
       "AWS"
     ],
     "scope": "Voice · Text · Vision"
-  },
-  {
-    "id": "xceltube",
-    "title": "XcelTube",
-    "category": "Learning platform · Web applications",
-    "role": null,
-    "summary": "A study experience connecting video lessons, PDF notes, practice questions, and AI-assisted learning. Chapter navigation and immediate answer feedback help students move between content and practice.",
-    "contributions": [
-      "Chapter-based video lessons and PDF notes with page and zoom controls.",
-      "Practice questions with correctness feedback and answer explanations.",
-      "AI tutor conversations and follow-up prompts."
-    ],
-    "detailHeading": "Interface highlights",
-    "tech": [],
-    "url": workReferences.xceltube.url,
-    "categories": [
-      "web"
-    ],
-    "meta": "INTERACTIVE LEARNING / WEB",
-    "short": "Video lessons, PDF notes, practice questions, and AI-assisted learning in one study interface.",
-    "tags": [
-      "Learning platform",
-      "Interactive tools"
-    ],
-    "scope": "Education platform"
   },
   {
     "id": "fitcoin",
