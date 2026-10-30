@@ -4,6 +4,8 @@ My personal portfolio site, showing my experience, selected projects, tech stack
 
 **Live:** [arsalan-portfolio-sooty-alpha.vercel.app](https://arsalan-portfolio-sooty-alpha.vercel.app)
 
+![Portfolio home page](docs/portfolio-home.jpg)
+
 ## Features
 
 - **Projects** with filters and a detail dialog, plus a gallery of presentation images and a short showreel
