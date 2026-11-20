@@ -19,7 +19,7 @@ export function Showcase() {
           <article className="showreel-card reveal" aria-labelledby="showreel-title">
             <div className="showreel-heading">
               <span className="mono"><span className="dot" /> THE SHOWREEL</span>
-              <span className="showreel-duration mono">00:58</span>
+              <span className="showreel-duration mono">00:53</span>
             </div>
             <video className="showreel-video" controls playsInline preload="none"
               width={showreel.width} height={showreel.height} poster={showreel.poster}
@@ -37,7 +37,7 @@ export function Showcase() {
               </div>
               <details className="showreel-overview">
                 <summary>What’s in the video</summary>
-                <p>Fitcoin product storytelling; XcelTube learning content and PDF notes; Think Study Learn calculators; SupplyED business interfaces; and Pherrix navigation. The closing sequence brings these interfaces together in a montage.</p>
+                <p>Fitcoin product storytelling; XcelTube learning content, PDF notes and AI tutor; SupplyED business interfaces; and Pherrix navigation. The closing sequence brings these interfaces together in a montage.</p>
               </details>
             </div>
           </article>

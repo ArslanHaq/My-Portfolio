@@ -1,7 +1,7 @@
 import { workReferences } from "./work-references";
 
-export type ProjectId = "cvvid" | "tsl" | "xceltube" | "fitcoin" | "pherrix" | "cell" | "visa" | "ddid";
-export type ProjectCategory = "web" | "mobile" | "web3";
+export type ProjectId = "screening" | "xceltube" | "cvvid" | "biometrics" | "fitcoin" | "pherrix" | "cell" | "visa" | "ddid";
+export type ProjectCategory = "web" | "mobile" | "web3" | "fintech";
 export interface Project {
   id: ProjectId;
   title: string;
@@ -24,6 +24,51 @@ export interface Project {
 /** Owner-supplied work descriptions. Unconfirmed roles and stacks stay absent. */
 export const projects: Project[] = [
   {
+    "id": "screening",
+    "title": "Sanctions Screening Platform",
+    "category": "Bank compliance · Dashboards & data",
+    "role": "Full-stack development · Idanimo LLC",
+    "summary": "An on-premises sanctions, PEP and payment-screening platform that bank compliance teams use to check people, organisations and payments against official watchlists. I rebuilt its staff and admin web apps, built its dashboards and reports, and made screening fast and reliable at volume.",
+    "contributions": [
+      "Rebuilt the staff and admin web apps with Next.js 16, React 19, TypeScript and Tailwind CSS, using TanStack Query and Table and an API client generated from OpenAPI.",
+      "Built the overview dashboard: 30-day KPIs, a 14-day Recharts trend of matched and not-matched searches, monthly usage against each organisation’s quota, and matches by list, all computed with SQL aggregates.",
+      "Batch screening of up to 1,000 records per file, each screened as its own search, with results cached for an hour so analysts can filter, review and export without re-running the batch.",
+      "Kept screening fast under load with worker processes that recycle every 2,000 checks and a prebuilt local sanctions database, while heavy exports (ZIP, CSV, XLSX) run as background jobs.",
+      "Made watchlist updates safe: new versions install only after signature, checksum and structure checks, and lists that shrink sharply or roll back are refused.",
+      "Built multi-tenant administration (products and quotas per organisation, roles, rate-limited API keys with usage tracking, case-review workflows) and a Python/FastAPI update service with scheduled builds and change reports.",
+      "Every release is gated by Playwright tests, 376 API checks and an 846-search regression suite that guards match accuracy."
+    ],
+    "detailHeading": "What I built",
+    "tech": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "TanStack Query",
+      "Recharts",
+      "Python",
+      "FastAPI",
+      "SQLite",
+      "Docker",
+      "Nginx",
+      "Playwright"
+    ],
+    "url": null,
+    "categories": [
+      "web",
+      "fintech"
+    ],
+    "meta": "FINTECH COMPLIANCE / FULL STACK",
+    "short": "Sanctions, PEP and payment screening for banks, with live dashboards, batch screening, case review and signed watchlist updates.",
+    "tags": [
+      "Next.js",
+      "Recharts",
+      "FastAPI"
+    ],
+    "scope": "Dashboards · Batch · Cases",
+    "linkNote": "This platform runs on banks’ own servers, so there is no public link. Get in touch to hear more about how it works."
+  },
+  {
     "id": "xceltube",
     "title": "XcelTube",
     "category": "AI tutor · Exam preparation platform",
@@ -34,7 +79,9 @@ export const projects: Project[] = [
       "Added a voice tutor using Amazon Nova 2 Sonic speech-to-speech streaming, with live captions shown in Urdu script.",
       "Made the tutor aware of the subject, chapter, lecture or past paper it is opened from, with study shortcuts, tutor personas and usage limits by plan.",
       "Built courses, past papers, full-length mock tests, a practice-paper builder, quizzes and a leaderboard.",
-      "Added Easypaisa subscriptions, promo codes, referrals, Google sign-in, two-factor authentication and an admin panel."
+      "Added Easypaisa subscriptions, promo codes, referrals, Google sign-in and two-factor authentication.",
+      "Built the admin dashboards: user and subscription management filtered by package, payment and account status, with payment approval and CSV export.",
+      "Built content analytics (daily views and engagement across lectures, notes and papers, from 7 days to 12 months) and sign-up source analytics (channel, target exam, subject and region)."
     ],
     "detailHeading": "What I built",
     "tech": [
@@ -95,40 +142,36 @@ export const projects: Project[] = [
     "scope": "Video CV platform"
   },
   {
-    "id": "tsl",
-    "title": "Think Study Learn",
-    "category": "AI assistant · Learning platform",
-    "role": "Full-stack development",
-    "summary": "An educational platform combining video lessons, course materials, and AI-assisted learning. I contributed to the web application, backend integration, and AWS-based content delivery, alongside a multimodal assistant for voice, text, and image interaction.",
+    "id": "biometrics",
+    "title": "Biometric Identity Verification",
+    "category": "Digital identity · Banking apps",
+    "role": "Development · Idanimo LLC",
+    "summary": "Biometric identity verification used in banks’ mobile apps, checking customers against national identity records during remote onboarding. I worked on fingerprint capture, liveness and face matching, and on protecting the data in transit.",
     "contributions": [
-      "Contributed to student registration, course content, and video-learning experiences.",
-      "Connected the application with NestJS services and AWS infrastructure for content delivery and data management.",
-      "Developed a multimodal AI assistant supporting voice conversations, text chat, and image understanding."
+      "Captured fingerprints and generated WSQ fingerprint templates for verification against national identity records.",
+      "Worked on liveness detection and face matching engines for remote identity verification, to prevent spoofing and impersonation.",
+      "Encrypted API request and response payloads between the mobile apps and verification services to protect biometric and identity data."
     ],
     "tech": [
-      "Next.js",
-      "NestJS",
-      "Redux Toolkit",
-      "OpenAI",
-      "AWS EC2",
-      "ECR",
-      "IAM",
-      "S3",
-      "CloudFront"
+      "WSQ fingerprint templates",
+      "Liveness detection",
+      "Face matching",
+      "Payload encryption"
     ],
-    "url": workReferences.tsl.url,
+    "url": null,
     "categories": [
-      "web"
+      "mobile",
+      "fintech"
     ],
-    "meta": "AI & EDUCATION / FULL STACK",
-    "short": "Video lessons, course materials, and an AI assistant for voice, text, and image-based learning.",
+    "meta": "DIGITAL IDENTITY / BANKING",
+    "short": "Fingerprint, liveness and face-matching verification for banks’ mobile apps, with encrypted payloads end to end.",
     "tags": [
-      "Next.js",
-      "NestJS",
-      "OpenAI",
-      "AWS"
+      "Biometrics",
+      "Liveness",
+      "Encryption"
     ],
-    "scope": "Voice · Text · Vision"
+    "scope": "Fingerprint · Face · Liveness",
+    "linkNote": "This work runs inside banks’ own apps, so there is no public link. Get in touch to discuss identity verification."
   },
   {
     "id": "fitcoin",
@@ -282,7 +325,8 @@ export const projects: Project[] = [
     ],
     "url": null,
     "categories": [
-      "mobile"
+      "mobile",
+      "fintech"
     ],
     "meta": "DIGITAL IDENTITY / MOBILE",
     "short": "A React Native wallet for digitally signed documents, with secure storage and modernized dependencies.",

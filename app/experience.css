@@ -277,3 +277,35 @@ body { font-family: Arial, Helvetica, sans-serif; }
 
 html.motion-paused .discipline-track,html.page-hidden .discipline-track { animation-play-state: paused !important; }
 @media (prefers-reduced-motion: reduce) { html .discipline-track { animation: none !important; } }
+
+/* Screening platform and biometric identity card illustrations. */
+.screening-visual { background: radial-gradient(ellipse at 55% 60%, #1d4a52, #0e2329 78%); }
+.screen-dash { position: absolute; width: 74%; height: 196px; left: 13%; top: 64px; padding: 14px 16px; background: #0f262c; border: 1px solid #9fe3d633; border-radius: 10px; transform: rotate(-3deg); box-shadow: 0 18px 38px #0006; }
+.screen-dash-top { display: flex; justify-content: space-between; align-items: center; color: #d8f3ec; font-size: 11px; font-weight: 600; letter-spacing: -.02em; }
+.screen-dash-chip { font-size: 6px; letter-spacing: .08em; padding: 3px 7px; border-radius: 9px; background: #ff8a6b; color: #2a120a; }
+.screen-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 11px; }
+.screen-kpi { border: 1px solid #9fe3d622; border-radius: 6px; padding: 7px; }
+.screen-kpi small { display: block; font-size: 5.5px; letter-spacing: .08em; color: #8fbcb3; }
+.screen-kpi i { display: block; height: 5px; width: var(--w); margin-top: 6px; border-radius: 3px; background: #7fe0c9; }
+.screen-bars { display: flex; align-items: flex-end; gap: 6px; height: 92px; margin-top: 10px; padding: 0 2px; border-bottom: 1px solid #9fe3d622; }
+.screen-bar { flex: 1; display: flex; flex-direction: column-reverse; gap: 2px; }
+.screen-bar i { display: block; height: var(--h); border-radius: 2px; }
+.screen-bar .clear { background: #3fbfa6; }
+.screen-bar .match { background: #ff8a6b; }
+.screen-badge { position: absolute; right: 9%; bottom: 26px; display: flex; align-items: center; gap: 7px; padding: 10px 14px; border-radius: 10px; background: #d7f5ec; color: #12352d; font-size: 10px; font-weight: 600; transform: rotate(4deg); box-shadow: 0 10px 22px #0005; }
+.screen-badge .icon { width: 14px; height: 14px; }
+.biometrics-visual { background: radial-gradient(ellipse at 50% 60%, #3a2f5c, #19152b 78%); }
+.bio-print { position: absolute; width: 190px; height: 230px; left: 7%; top: 52px; border-radius: 50% 50% 46% 46%; background: repeating-radial-gradient(ellipse at 50% 58%, transparent 0 7px, #c9b8ff2e 7px 9px); mask-image: radial-gradient(ellipse at 50% 55%, #000 55%, transparent 72%); transform: rotate(-12deg); }
+.bio-phone { position: absolute; width: 132px; height: 214px; right: 18%; top: 54px; padding: 26px 14px 14px; background: #120f1f; border: 3px solid #6c5aa6; border-radius: 22px; transform: rotate(6deg); box-shadow: 0 18px 38px #0007; }
+.bio-phone::before { content: ''; position: absolute; top: 9px; left: calc(50% - 16px); width: 32px; height: 5px; border-radius: 4px; background: #6c5aa6; }
+.bio-face { position: relative; height: 128px; border-radius: 12px; background: #1d1833; overflow: hidden; }
+.bio-head { position: absolute; width: 56px; height: 70px; left: calc(50% - 28px); top: 24px; border: 2px solid #c9b8ff99; border-radius: 50%; }
+.bio-corner { position: absolute; width: 16px; height: 16px; border-color: #9fe3c4; border-style: solid; border-width: 0; }
+.bio-corner.c1 { top: 10px; left: 10px; border-top-width: 2px; border-left-width: 2px; }
+.bio-corner.c2 { top: 10px; right: 10px; border-top-width: 2px; border-right-width: 2px; }
+.bio-corner.c3 { bottom: 10px; left: 10px; border-bottom-width: 2px; border-left-width: 2px; }
+.bio-corner.c4 { bottom: 10px; right: 10px; border-bottom-width: 2px; border-right-width: 2px; }
+.bio-scan { position: absolute; left: 8px; right: 8px; top: 62px; height: 2px; background: #9fe3c4; box-shadow: 0 0 12px #9fe3c4; }
+.bio-caption { margin-top: 12px; text-align: center; font-size: 6.5px; letter-spacing: .1em; color: #c9b8ff; }
+.bio-verified { position: absolute; left: 12%; bottom: 28px; display: flex; align-items: center; gap: 7px; padding: 10px 14px; border-radius: 10px; background: #e3dbff; color: #2b2152; font-size: 10px; font-weight: 600; transform: rotate(-4deg); box-shadow: 0 10px 22px #0005; }
+.bio-verified .icon { width: 14px; height: 14px; }

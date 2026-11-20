@@ -1,7 +1,6 @@
 /** Public references supplied by the owner; these do not establish backend availability. */
 export const workReferences = {
   cvvid: { label: "CVVID", url: "https://www.cvvid.com/" },
-  tsl: { label: "Think Study Learn", url: "https://thinkstudylearn.com/" },
   fitcoin: { label: "Fitcoin showcase", url: "https://fitcoin-client.webflow.io/" },
   xceltube: { label: "XcelTube", url: "https://www.xceltube.com/" },
   supplyed: { label: "SupplyED prototype", url: "https://supplyed.vercel.app/" },

@@ -20,9 +20,39 @@ export function ProjectArtwork({ id, order }: { id: ProjectId; order: number }) 
       return (
         <div className="project-visual cvvid-visual" aria-hidden="true"><div className="visual-label"><span className="tiny-square" />CVVID / VIDEO STUDIO</div><span className="visual-number mono">{number}</span><div className="mock-editor"><div className="editor-topbar"><div className="editor-tools"><i /><i /><i /></div><span className="editor-wordmark">cvvid.</span><span className="editor-export">Export video ↗</span></div><div className="editor-main"><div className="editor-sidebar"><i /><i /><i /></div><div className="editor-screen"><div className="screen-title">Your story.<br /><em>In motion.</em></div><div className="screen-play" /></div></div><div className="timeline-ruler"><span>00:00</span><span>00:15</span><span>00:30</span><span>00:45</span><span>01:00</span></div><div className="editor-timeline"><i /><i /><i /><i /><i /><i /><i /><i /><i /></div><div className="audio-track" /></div><div className="cvvid-badge">Create. Edit. Share. ↗</div></div>
       );
-    case "tsl":
+    case "screening":
       return (
-        <div className="project-visual tsl-visual" aria-hidden="true"><div className="visual-label"><span className="tiny-square" />TSL / AI LEARNING</div><span className="visual-number mono">{number}</span><div className="ai-dashboard"><div className="ai-header"><span className="ai-symbol"><svg className="icon" aria-hidden="true"><use href="#i-sparkle" /></svg></span><span>THINK · STUDY · LEARN</span><span>✦</span></div><div className="ai-title">A little curiosity.<br /><em>A world of possibilities.</em></div><div className="waveform" data-motion-scope=""><i style={{"--h": "8px", "--delay": "-0.00s", "--opacity": "0.40"} as CSSProperties} /><i style={{"--h": "11px", "--delay": "-0.13s", "--opacity": "0.52"} as CSSProperties} /><i style={{"--h": "18px", "--delay": "-0.26s", "--opacity": "0.64"} as CSSProperties} /><i style={{"--h": "12px", "--delay": "-0.39s", "--opacity": "0.76"} as CSSProperties} /><i style={{"--h": "24px", "--delay": "-0.52s", "--opacity": "0.88"} as CSSProperties} /><i style={{"--h": "34px", "--delay": "-0.65s", "--opacity": "0.40"} as CSSProperties} /><i style={{"--h": "19px", "--delay": "-0.78s", "--opacity": "0.52"} as CSSProperties} /><i style={{"--h": "39px", "--delay": "-0.91s", "--opacity": "0.64"} as CSSProperties} /><i style={{"--h": "27px", "--delay": "-1.04s", "--opacity": "0.76"} as CSSProperties} /><i style={{"--h": "43px", "--delay": "-1.17s", "--opacity": "0.88"} as CSSProperties} /><i style={{"--h": "32px", "--delay": "-1.30s", "--opacity": "0.40"} as CSSProperties} /><i style={{"--h": "19px", "--delay": "-1.43s", "--opacity": "0.52"} as CSSProperties} /><i style={{"--h": "28px", "--delay": "-1.56s", "--opacity": "0.64"} as CSSProperties} /><i style={{"--h": "42px", "--delay": "-1.69s", "--opacity": "0.76"} as CSSProperties} /><i style={{"--h": "35px", "--delay": "-1.82s", "--opacity": "0.88"} as CSSProperties} /><i style={{"--h": "22px", "--delay": "-1.95s", "--opacity": "0.40"} as CSSProperties} /><i style={{"--h": "14px", "--delay": "-2.08s", "--opacity": "0.52"} as CSSProperties} /><i style={{"--h": "29px", "--delay": "-2.21s", "--opacity": "0.64"} as CSSProperties} /><i style={{"--h": "38px", "--delay": "-2.34s", "--opacity": "0.76"} as CSSProperties} /><i style={{"--h": "27px", "--delay": "-2.47s", "--opacity": "0.88"} as CSSProperties} /><i style={{"--h": "18px", "--delay": "-2.60s", "--opacity": "0.40"} as CSSProperties} /><i style={{"--h": "32px", "--delay": "-2.73s", "--opacity": "0.52"} as CSSProperties} /><i style={{"--h": "23px", "--delay": "-2.86s", "--opacity": "0.64"} as CSSProperties} /><i style={{"--h": "15px", "--delay": "-2.99s", "--opacity": "0.76"} as CSSProperties} /><i style={{"--h": "21px", "--delay": "-3.12s", "--opacity": "0.88"} as CSSProperties} /><i style={{"--h": "10px", "--delay": "-3.25s", "--opacity": "0.40"} as CSSProperties} /><i style={{"--h": "8px", "--delay": "-3.38s", "--opacity": "0.52"} as CSSProperties} /></div><div className="ai-modebar"><span>Voice</span><span>Text</span><span>Vision</span></div></div><div className="ai-floating"><svg className="icon" aria-hidden="true"><use href="#i-mic" /></svg>Learning, with a voice.</div></div>
+        <div className="project-visual screening-visual" aria-hidden="true">
+          <div className="visual-label"><span className="tiny-square" />SCREENING / COMPLIANCE</div>
+          <span className="visual-number mono">{number}</span>
+          <div className="screen-dash">
+            <div className="screen-dash-top"><span>Screening overview</span><span className="screen-dash-chip mono">30 DAYS</span></div>
+            <div className="screen-kpis">
+              {["SEARCHES", "MATCHES", "QUOTA"].map((label, index) => (
+                <div className="screen-kpi" key={label}><small className="mono">{label}</small><i style={{"--w": `${[78, 46, 62][index]}%`} as CSSProperties} /></div>
+              ))}
+            </div>
+            <div className="screen-bars">
+              {[[18, 8], [26, 10], [14, 6], [34, 16], [22, 9], [40, 18], [30, 12], [48, 22], [36, 14], [56, 26], [44, 20], [62, 28]].map(([clear, match], index) => (
+                <span className="screen-bar" key={index}><i className="clear" style={{"--h": `${clear}px`} as CSSProperties} /><i className="match" style={{"--h": `${match}px`} as CSSProperties} /></span>
+              ))}
+            </div>
+          </div>
+          <div className="screen-badge"><svg className="icon" aria-hidden="true"><use href="#i-shield" /></svg>Batch · 1,000 records</div>
+        </div>
+      );
+    case "biometrics":
+      return (
+        <div className="project-visual biometrics-visual" aria-hidden="true">
+          <div className="visual-label"><span className="tiny-square" />BIOMETRICS / IDENTITY</div>
+          <span className="visual-number mono">{number}</span>
+          <div className="bio-print" />
+          <div className="bio-phone">
+            <div className="bio-face"><span className="bio-corner c1" /><span className="bio-corner c2" /><span className="bio-corner c3" /><span className="bio-corner c4" /><span className="bio-head" /><span className="bio-scan" /></div>
+            <div className="bio-caption mono">LIVENESS CHECK</div>
+          </div>
+          <div className="bio-verified"><svg className="icon" aria-hidden="true"><use href="#i-check" /></svg>Identity verified</div>
+        </div>
       );
     case "cell":
       return (

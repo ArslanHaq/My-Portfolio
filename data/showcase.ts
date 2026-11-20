@@ -2,12 +2,12 @@ import type { WorkReferenceId } from "./work-references";
 
 export const showreel = {
   title: "Web development showreel",
-  description: "A 58-second look at web interfaces, learning tools, responsive layouts, and interactions across Fitcoin, XcelTube, Think Study Learn, SupplyED, and Pherrix.",
+  description: "A 53-second look at web interfaces, learning tools, responsive layouts, and interactions across Fitcoin, XcelTube, SupplyED, and Pherrix.",
   src: "/media/portfolio-showreel.mp4",
   poster: "/media/showreel-poster.webp",
   width: 1280,
   height: 720,
-  duration: "PT58S",
+  duration: "PT53S",
 };
 
 type Presentation = { id: string; title: string; category: string; description: string; alt: string; references: WorkReferenceId[] };
@@ -23,11 +23,11 @@ const presentations: Presentation[] = [
   },
   {
     id: "ai-learning-platforms",
-    references: ["tsl", "xceltube"],
+    references: ["xceltube"],
     title: "A smarter way to learn.",
     category: "LEARNING PLATFORMS & AI",
-    description: "AI learning tools and course experiences for Think Study Learn and XcelTube.",
-    alt: "Think Study Learn question upload and study resource interfaces alongside XcelTube video lessons, lecture notes, and practice questions.",
+    description: "XcelTube’s content analytics dashboard alongside its video lessons, lecture notes, and practice questions.",
+    alt: "XcelTube admin content analytics with daily views per day and lecture engagement, alongside an XcelTube physics lesson with chapter content.",
   },
   {
     id: "responsive-mobile-design",
@@ -39,11 +39,11 @@ const presentations: Presentation[] = [
   },
   {
     id: "business-applications",
-    references: ["supplyed", "pherrix", "tsl"],
+    references: ["supplyed", "pherrix", "xceltube"],
     title: "Built around the way you work.",
     category: "BUSINESS APPLICATIONS",
-    description: "SupplyED prototype pricing, Pherrix corporate navigation, and sample results from Think Study Learn’s aggregate calculator.",
-    alt: "Business application presentation with SupplyED prototype pricing, the Pherrix website, and a Think Study Learn university admission aggregate calculator.",
+    description: "SupplyED prototype pricing, Pherrix corporate navigation, and XcelTube’s sign-up analytics dashboard.",
+    alt: "Business application presentation with SupplyED prototype pricing, the Pherrix website, and the XcelTube admin sign-up sources dashboard showing how new students found the platform.",
   },
   {
     id: "distinctive-web-design",

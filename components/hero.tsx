@@ -21,7 +21,7 @@ export function Hero() {
           <DeveloperWorkbench />
           <a className="hero-showreel-link" href="#showcase" data-cursor="VIEW">
             <span className="showreel-play" aria-hidden="true">↗</span>
-            <span>See the work in motion.<small className="mono">EXPLORE THE SHOWREEL · 00:58</small></span>
+            <span>See the work in motion.<small className="mono">EXPLORE THE SHOWREEL · 00:53</small></span>
             <span className="reel-lines" aria-hidden="true"><i /><i /><i /><i /><i /></span>
           </a>
         </div>
