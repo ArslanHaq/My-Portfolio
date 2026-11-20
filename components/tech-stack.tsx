@@ -14,18 +14,21 @@ const skillGroups: SkillGroup[] = [
       { label: "HTML5", icon: "html5" }, { label: "Tailwind CSS", icon: "tailwindcss" },
       { label: "Material UI", icon: "mui" }, { label: "React Flow", icon: "flow" },
       { label: "React Query", icon: "reactquery" }, { label: "Redux Toolkit", icon: "redux" },
+      { label: "Recharts", icon: "chart" }, { label: "Playwright", icon: "test" },
     ],
   },
   {
     title: "Backend, data & deployment",
     primary: [
       { label: "Node.js", icon: "nodedotjs" }, { label: "NestJS", icon: "nestjs" },
-      { label: "Express.js", icon: "express" }, { label: "AWS", icon: "aws" },
-      { label: "Docker", icon: "docker" },
+      { label: "Express.js", icon: "express" }, { label: "Python", icon: "python" },
+      { label: "AWS", icon: "aws" }, { label: "Docker", icon: "docker" },
     ],
     supporting: [
-      { label: "REST APIs", icon: "api" }, { label: "GraphQL", icon: "graphql" },
-      { label: "SQL", icon: "database" }, { label: "MongoDB", icon: "mongodb" },
+      { label: "FastAPI", icon: "fastapi" }, { label: "REST APIs", icon: "api" },
+      { label: "GraphQL", icon: "graphql" }, { label: "SQL", icon: "database" },
+      { label: "SQLite", icon: "sqlite" }, { label: "MongoDB", icon: "mongodb" },
+      { label: "Nginx", icon: "nginx" },
       { label: "EC2", icon: "server" }, { label: "S3", icon: "bucket" },
       { label: "CloudFront", icon: "globe" }, { label: "ECR", icon: "package" },
       { label: "IAM", icon: "key" },
@@ -35,7 +38,7 @@ const skillGroups: SkillGroup[] = [
     title: "Mobile & integrations",
     primary: [
       { label: "React Native", icon: "react" }, { label: "NextAuth", icon: "auth" },
-      { label: "OpenAI", icon: "ai" },
+      { label: "OpenAI", icon: "ai" }, { label: "Amazon Bedrock", icon: "ai" },
     ],
     supporting: [
       { label: "Secure Storage", icon: "lock" }, { label: "Ethers", icon: "ethers" },
@@ -50,7 +53,7 @@ export function TechStack() {
   return (
     <section className="stack-section" aria-labelledby="stack-title">
       <div className="wrap">
-        <div className="stack-intro"><h2 id="stack-title">Tools behind the work.</h2><p>Across websites, full-stack applications, and mobile experiences.</p></div>
+        <div className="stack-intro"><h2 id="stack-title">Tools behind the work.</h2><p>Across banking platforms, data dashboards, full-stack applications, and mobile experiences.</p></div>
         <div className="stack-groups">
           {skillGroups.map(group => (
             <div className="stack-group" key={group.title}>

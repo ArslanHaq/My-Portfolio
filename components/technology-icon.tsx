@@ -17,6 +17,8 @@ const utilityGlyphs = {
   lock: <><rect x="4" y="10" width="16" height="11" rx="2" /><path d="M8 10V6a4 4 0 0 1 8 0v4M12 14v3" /></>,
   chain: <><path d="m9 8 3-3a5 5 0 0 1 7 7l-3 3M8 9l-3 3a5 5 0 0 0 7 7l3-3m-6-1 6-6" /></>,
   fox: <><path d="m3 3 7 5h4l7-5-2 12-7 6-7-6L3 3Zm2 12 4-3 3 6 3-6 4 3M7 8l2 4m8-4-2 4m-5 3h4" /></>,
+  chart: <><path d="M3 3v18h18" /><path d="M7 16v-4m5 4V8m5 8v-6" /></>,
+  test: <><rect x="3" y="3" width="18" height="18" rx="3" /><path d="m8 12 3 3 5-6" /></>,
   branch: <><circle cx="6" cy="5" r="2" /><circle cx="6" cy="19" r="2" /><circle cx="18" cy="5" r="2" /><path d="M6 7v10m12-10v2c0 5-12 3-12 8" /></>,
 };
 

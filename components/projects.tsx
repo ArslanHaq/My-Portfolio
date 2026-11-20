@@ -9,7 +9,7 @@ import { ProjectArtwork } from "./project-artwork";
 type Filter = "all" | ProjectCategory;
 const filters: { id: Filter; label: string }[] = [
   { id: "all", label: "All projects" }, { id: "web", label: "Web & AI" },
-  { id: "mobile", label: "Mobile" }, { id: "web3", label: "Web3" },
+  { id: "fintech", label: "Fintech & identity" }, { id: "mobile", label: "Mobile" }, { id: "web3", label: "Web3" },
 ];
 
 export function Projects() {
@@ -45,7 +45,7 @@ export function Projects() {
       <div className="wrap">
         <div className="section-heading reveal">
           <div><p className="section-kicker mono"><span className="index">01 /</span> SELECTED WORK</p><h2 id="work-title">Ideas into experiences.</h2></div>
-          <p className="section-subtitle">Selected websites and applications across video, learning, business, and mobile.</p>
+          <p className="section-subtitle">Selected platforms and applications across banking, data dashboards, learning, video, and mobile.</p>
         </div>
         <div className="filters" role="group" aria-label="Filter projects by category">
           {filters.map(item => <button key={item.id} className="filter" type="button" aria-pressed={filter === item.id}

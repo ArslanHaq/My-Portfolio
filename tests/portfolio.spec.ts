@@ -4,13 +4,13 @@ import { readFile } from "node:fs/promises";
 
 const resumePath = "/resume/Muhammad-Arsalan-Resume.pdf";
 
-test("homepage has eight projects and a responsive layout", async ({ page }) => {
+test("homepage has nine projects and a responsive layout", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto("/");
   await expect(page).toHaveTitle(/Muhammad Arsalan/);
   await expect(page.locator("h1")).toContainText("experiences");
-  await expect(page.locator(".project-card:visible")).toHaveCount(8);
+  await expect(page.locator(".project-card:visible")).toHaveCount(9);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
   expect(errors).toEqual([]);
 });
@@ -18,12 +18,16 @@ test("homepage has eight projects and a responsive layout", async ({ page }) => 
 test("category filtering works", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Mobile", exact: true }).click();
+  await expect(page.locator(".project-card:visible")).toHaveCount(4);
+  await expect(page.locator("#project-count")).toHaveText("04 projects");
+  await page.getByRole("button", { name: "Fintech & identity", exact: true }).click();
   await expect(page.locator(".project-card:visible")).toHaveCount(3);
-  await expect(page.locator("#project-count")).toHaveText("03 projects");
+  await expect(page.locator("#project-screening")).toBeVisible();
+  await expect(page.locator("#project-biometrics")).toBeVisible();
   await page.getByRole("button", { name: "Web3", exact: true }).click();
   await expect(page.locator(".project-card:visible")).toHaveCount(1);
   await page.getByRole("button", { name: "All projects", exact: true }).click();
-  await expect(page.locator(".project-card:visible")).toHaveCount(8);
+  await expect(page.locator(".project-card:visible")).toHaveCount(9);
 });
 
 test("project dialog supports keyboard dismissal and restores focus", async ({ page }) => {
@@ -68,6 +72,19 @@ test("project details keep unconfirmed roles and technologies out of the UI", as
   await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "Explore DDID Wallet", exact: true }).click();
   await expect(page.getByRole("dialog").getByRole("link", { name: "Visit project" })).toHaveCount(0);
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Explore Sanctions Screening Platform", exact: true }).click();
+  const screening = page.getByRole("dialog");
+  await expect(screening.getByRole("heading", { name: "What I built", exact: true })).toBeVisible();
+  await expect(screening).toContainText("runs on banks’ own servers");
+  await expect(screening.getByRole("link", { name: "Visit project" })).toHaveCount(0);
+});
+
+test("retired projects and unconfirmed languages stay off the page", async ({ page }) => {
+  await page.goto("/");
+  const text = await page.locator("body").innerText();
+  expect(text).not.toMatch(/think\s*study\s*learn/i);
+  expect(text).not.toMatch(/\bJava\b/);
 });
 
 test("gallery references match the multi-project presentations", async ({ page }) => {
@@ -77,7 +94,7 @@ test("gallery references match the multi-project presentations", async ({ page }
   await expect(first.getByRole("link", { name: /SupplyED prototype/ })).toHaveAttribute("href", "https://supplyed.vercel.app/");
   await expect(first.getByRole("link", { name: /XcelTube/ })).toHaveAttribute("href", "https://www.xceltube.com/");
   await expect(page.locator(".showcase-card").nth(2)).toContainText("mobile UI concepts");
-  await expect(page.locator(".showcase-card").nth(3)).toContainText("sample results");
+  await expect(page.locator(".showcase-card").nth(3)).toContainText("sign-up analytics");
 });
 
 test("resume URL serves the original PDF", async ({ request }) => {
@@ -149,7 +166,7 @@ test("showreel loads only on play and supports seeking", async ({ page, request 
   });
   await expect.poll(() => video.evaluate(element => (element as HTMLVideoElement).currentTime)).toBeGreaterThan(0);
   expect(mediaRequests.length).toBeGreaterThan(0);
-  expect(await video.evaluate(element => (element as HTMLVideoElement).duration)).toBeCloseTo(58, 0);
+  expect(await video.evaluate(element => (element as HTMLVideoElement).duration)).toBeCloseTo(52.6, 0);
   const range = await request.get("/media/portfolio-showreel.mp4", { headers: { Range: "bytes=0-1023" } });
   expect(range.status()).toBe(206);
   expect(range.headers()["content-type"]).toContain("video/mp4");
