@@ -9,7 +9,7 @@ export const profile = {
   phoneDisplay: "0309 3244976",
   github: "https://github.com/ArslanHaq",
   linkedin: "https://www.linkedin.com/in/muhammadarsalanulhaq/",
-  fiverr: "https://www.fiverr.com/s/50rr0vb",
+  fiverr: "https://www.fiverr.com/arsl_baba",
   resume: "/resume/Muhammad-Arsalan-Resume.pdf",
 };
 

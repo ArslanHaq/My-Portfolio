@@ -309,3 +309,47 @@ html.motion-paused .discipline-track,html.page-hidden .discipline-track { animat
 .bio-caption { margin-top: 12px; text-align: center; font-size: 6.5px; letter-spacing: .1em; color: #c9b8ff; }
 .bio-verified { position: absolute; left: 12%; bottom: 28px; display: flex; align-items: center; gap: 7px; padding: 10px 14px; border-radius: 10px; background: #e3dbff; color: #2b2152; font-size: 10px; font-weight: 600; transform: rotate(-4deg); box-shadow: 0 10px 22px #0005; }
 .bio-verified .icon { width: 14px; height: 14px; }
+
+/* Project details dialog: centred, structured and easy to scan. */
+.project-dialog { margin: auto; width: min(960px, calc(100vw - 32px)); max-height: min(90dvh, 980px); border-radius: 24px; background: var(--surface); }
+.project-dialog::backdrop { background: #05080dd9; backdrop-filter: blur(10px); }
+.project-dialog[open] { animation: dialog-in .28s cubic-bezier(.2,.8,.2,1); }
+@keyframes dialog-in { from { opacity: 0; transform: translateY(14px) scale(.985); } to { opacity: 1; transform: none; } }
+.motion-paused .project-dialog[open] { animation: none; }
+.dialog-inner { padding: 44px 48px 40px; }
+.dialog-header { gap: 28px; padding-bottom: 26px; border-bottom: 1px solid var(--line); }
+.dialog-eyebrow { display: inline-flex; align-items: center; gap: 9px; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--highlight); margin: 0 0 16px; }
+.dialog-eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px #ff5f5622; }
+.dialog-title { font-size: clamp(32px, 3.6vw, 48px); line-height: 1.05; letter-spacing: -.055em; font-weight: 600; }
+.dialog-role { display: inline-block; margin: 16px 0 0; padding: 6px 12px; border: 1px solid var(--line); border-radius: 30px; font-size: 12px; color: var(--muted); }
+.dialog-close { flex: none; position: sticky; top: 0; }
+.dialog-summary { margin: 26px 0 0; font-size: 16px; line-height: 1.75; color: var(--muted); max-width: 72ch; }
+.dialog-section-title { display: flex; align-items: center; gap: 14px; margin: 36px 0 16px; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--text); font-weight: 600; }
+.dialog-section-title::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+.dialog-stats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.dialog-stat { display: flex; flex-direction: column; gap: 6px; padding: 18px 18px 16px; border: 1px solid var(--line); border-radius: 16px; background: linear-gradient(160deg, #ff5f5612, transparent 60%), var(--bg); }
+.dialog-stat strong { font-size: 30px; line-height: 1; letter-spacing: -.04em; font-weight: 600; color: var(--highlight); }
+.dialog-stat span { font-size: 12px; line-height: 1.45; color: var(--muted); }
+.dialog-highlights { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.dialog-highlight { position: relative; padding: 20px 22px 20px 64px; border: 1px solid var(--line); border-radius: 16px; background: var(--bg); }
+.dialog-highlight:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.dialog-highlight-index { position: absolute; left: 20px; top: 21px; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: #ff5f561f; color: var(--highlight); font-size: 11px; }
+.dialog-highlight h4 { margin: 0 0 7px; font-size: 16px; letter-spacing: -.02em; font-weight: 600; color: var(--text); }
+.dialog-highlight p { margin: 0; font-size: 13.5px; line-height: 1.7; color: var(--muted); }
+.dialog-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; font-size: 14px; line-height: 1.7; }
+.dialog-list li { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; margin: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--bg); }
+.dialog-list li .icon { flex: none; width: 16px; height: 16px; margin-top: 4px; color: var(--highlight); }
+.dialog-tags .tag { font-size: 12px; }
+.dialog-links { margin-top: 34px; padding-top: 26px; border-top: 1px solid var(--line); }
+.dialog-note { font-size: 12px; }
+@media (max-width: 760px) {
+  .project-dialog { width: calc(100vw - 20px); max-height: 92dvh; border-radius: 20px; }
+  .dialog-inner { padding: 26px 22px 28px; }
+  .dialog-title { font-size: 30px; }
+  .dialog-summary { font-size: 14.5px; }
+  .dialog-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dialog-stat strong { font-size: 24px; }
+  .dialog-highlights { grid-template-columns: 1fr; }
+  .dialog-highlight { padding: 18px 18px 18px 58px; }
+  .dialog-highlight-index { left: 16px; top: 18px; }
+}

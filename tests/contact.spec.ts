@@ -6,7 +6,7 @@ test("contact details and social links are correct and responsive", async ({ pag
   await contact.scrollIntoViewIfNeeded();
   await expect(contact.getByRole("link", { name: /LinkedIn/ })).toHaveAttribute("href", "https://www.linkedin.com/in/muhammadarsalanulhaq/");
   await expect(contact.getByRole("link", { name: /GitHub/ })).toHaveAttribute("href", "https://github.com/ArslanHaq");
-  await expect(contact.getByRole("link", { name: /Fiverr/ })).toHaveAttribute("href", "https://www.fiverr.com/s/50rr0vb");
+  await expect(contact.getByRole("link", { name: /Fiverr/ })).toHaveAttribute("href", "https://www.fiverr.com/arsl_baba");
   await expect(contact.getByRole("link", { name: "0309 3244976" })).toHaveAttribute("href", "tel:+923093244976");
   await expect(contact).toContainText("Based in Islamabad, Pakistan");
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
