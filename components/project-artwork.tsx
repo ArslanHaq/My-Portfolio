@@ -38,7 +38,7 @@ export function ProjectArtwork({ id, order }: { id: ProjectId; order: number }) 
               ))}
             </div>
           </div>
-          <div className="screen-badge"><svg className="icon" aria-hidden="true"><use href="#i-shield" /></svg>Batch · 1,000 records</div>
+          <div className="screen-badge"><svg className="icon" aria-hidden="true"><use href="#i-shield" /></svg>Batch · 300,000 records</div>
         </div>
       );
     case "biometrics":

@@ -86,13 +86,26 @@ export function Projects() {
         }}>
         {selected && <div className="dialog-inner">
           <div className="dialog-header">
-            <div><p className="dialog-eyebrow mono">{selected.category}</p><h2 className="dialog-title" id="dialog-title">{selected.title}</h2></div>
-            <button className="icon-button" type="button" aria-label="Close project details" onClick={() => dialog.current?.close()}><Icon name="close" /></button>
+            <div>
+              <p className="dialog-eyebrow mono"><span className="dialog-eyebrow-dot" />{selected.category}</p>
+              <h2 className="dialog-title" id="dialog-title">{selected.title}</h2>
+              {selected.role && <p className="dialog-role">{selected.role}</p>}
+            </div>
+            <button className="icon-button dialog-close" type="button" aria-label="Close project details" onClick={() => dialog.current?.close()}><Icon name="close" /></button>
           </div>
-          {selected.role && <p className="dialog-role">{selected.role}</p>}
           <p className="dialog-summary">{selected.summary}</p>
+          {selected.stats && <><h3 className="dialog-section-title">At a glance</h3>
+          <ul className="dialog-stats">{selected.stats.map(stat => <li className="dialog-stat" key={stat.label}><strong>{stat.value}</strong><span>{stat.label}</span></li>)}</ul></>}
           <h3 className="dialog-section-title">{selected.detailHeading ?? "My contribution"}</h3>
-          <ul className="dialog-list">{selected.contributions.map(point => <li key={point}>{point}</li>)}</ul>
+          {selected.highlights
+            ? <ul className="dialog-highlights">{selected.highlights.map((item, index) => (
+                <li className="dialog-highlight" key={item.title}>
+                  <span className="dialog-highlight-index mono">{String(index + 1).padStart(2, "0")}</span>
+                  <h4>{item.title}</h4>
+                  <p>{item.text}</p>
+                </li>
+              ))}</ul>
+            : <ul className="dialog-list">{selected.contributions.map(point => <li key={point}><Icon name="check" />{point}</li>)}</ul>}
           {selected.tech.length > 0 && <><h3 className="dialog-section-title">Technology</h3>
           <div className="dialog-tags">{selected.tech.map(tag => <span className="tag" key={tag}>{tag}</span>)}</div></>}
           <div className="dialog-links">

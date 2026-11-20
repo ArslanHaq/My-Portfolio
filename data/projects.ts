@@ -9,6 +9,10 @@ export interface Project {
   role: string | null;
   summary: string;
   contributions: string[];
+  /** Optional numbers shown in the dialog's "At a glance" row. */
+  stats?: { value: string; label: string }[];
+  /** Optional titled highlights; when present they replace the plain contribution list in the dialog. */
+  highlights?: { title: string; text: string }[];
   detailHeading?: string;
   tech: string[];
   url: string | null;
@@ -32,11 +36,55 @@ export const projects: Project[] = [
     "contributions": [
       "Rebuilt the staff and admin web apps with Next.js 16, React 19, TypeScript and Tailwind CSS, using TanStack Query and Table and an API client generated from OpenAPI.",
       "Built the overview dashboard: 30-day KPIs, a 14-day Recharts trend of matched and not-matched searches, monthly usage against each organisation’s quota, and matches by list, all computed with SQL aggregates.",
-      "Batch screening of up to 1,000 records per file, each screened as its own search, with results cached for an hour so analysts can filter, review and export without re-running the batch.",
+      "Batch screening of up to 300,000 records per batch, each screened as its own search, with results cached for an hour so analysts can filter, review and export without re-running the batch.",
       "Kept screening fast under load with worker processes that recycle every 2,000 checks and a prebuilt local sanctions database, while heavy exports (ZIP, CSV, XLSX) run as background jobs.",
       "Made watchlist updates safe: new versions install only after signature, checksum and structure checks, and lists that shrink sharply or roll back are refused.",
       "Built multi-tenant administration (products and quotas per organisation, roles, rate-limited API keys with usage tracking, case-review workflows) and a Python/FastAPI update service with scheduled builds and change reports.",
       "Every release is gated by Playwright tests, 376 API checks and an 846-search regression suite that guards match accuracy."
+    ],
+    "stats": [
+      {
+        "value": "300,000",
+        "label": "Records per batch"
+      },
+      {
+        "value": "2,000",
+        "label": "Checks before a worker recycles"
+      },
+      {
+        "value": "846",
+        "label": "Regression searches per release"
+      },
+      {
+        "value": "376",
+        "label": "API checks per release"
+      }
+    ],
+    "highlights": [
+      {
+        "title": "Staff and admin web apps",
+        "text": "Rebuilt with Next.js 16, React 19, TypeScript and Tailwind CSS, using TanStack Query and Table and an API client generated from OpenAPI."
+      },
+      {
+        "title": "Live dashboards",
+        "text": "30-day KPIs, a 14-day Recharts trend of matched and not-matched searches, monthly usage against each organisation’s quota, and matches by list, all computed with SQL aggregates."
+      },
+      {
+        "title": "Batch screening",
+        "text": "Up to 300,000 records per batch, each screened as its own search, with results cached for an hour so analysts can filter, review and export without re-running the batch."
+      },
+      {
+        "title": "Fast under load",
+        "text": "Worker processes recycle every 2,000 checks and screen against a prebuilt local sanctions database, while heavy ZIP, CSV and XLSX exports run as background jobs."
+      },
+      {
+        "title": "Safe watchlist updates",
+        "text": "New versions install only after signature, checksum and structure checks, and lists that shrink sharply or roll back are refused."
+      },
+      {
+        "title": "Multi-tenant administration",
+        "text": "Products and quotas per organisation, roles, rate-limited API keys with usage tracking, case-review workflows, and a Python/FastAPI update service with scheduled builds and change reports."
+      }
     ],
     "detailHeading": "What I built",
     "tech": [
@@ -82,6 +130,36 @@ export const projects: Project[] = [
       "Added Easypaisa subscriptions, promo codes, referrals, Google sign-in and two-factor authentication.",
       "Built the admin dashboards: user and subscription management filtered by package, payment and account status, with payment approval and CSV export.",
       "Built content analytics (daily views and engagement across lectures, notes and papers, from 7 days to 12 months) and sign-up source analytics (channel, target exam, subject and region)."
+    ],
+    "highlights": [
+      {
+        "title": "AI tutor",
+        "text": "Built on Amazon Bedrock with streamed answers, maths rendering, and image and PDF understanding."
+      },
+      {
+        "title": "Voice tutor",
+        "text": "Amazon Nova 2 Sonic speech-to-speech streaming, with live captions shown in Urdu script."
+      },
+      {
+        "title": "Context-aware study",
+        "text": "The tutor knows the subject, chapter, lecture or past paper it is opened from, with study shortcuts, tutor personas and usage limits by plan."
+      },
+      {
+        "title": "Learning tools",
+        "text": "Courses, past papers, full-length mock tests, a practice-paper builder, quizzes and a leaderboard."
+      },
+      {
+        "title": "Payments and accounts",
+        "text": "Easypaisa subscriptions, promo codes, referrals, Google sign-in and two-factor authentication."
+      },
+      {
+        "title": "Admin dashboards",
+        "text": "User and subscription management filtered by package, payment and account status, with payment approval and CSV export."
+      },
+      {
+        "title": "Analytics",
+        "text": "Content analytics (daily views and engagement across lectures, notes and papers) and sign-up source analytics (channel, target exam, subject and region)."
+      }
     ],
     "detailHeading": "What I built",
     "tech": [
@@ -151,6 +229,20 @@ export const projects: Project[] = [
       "Captured fingerprints and generated WSQ fingerprint templates for verification against national identity records.",
       "Worked on liveness detection and face matching engines for remote identity verification, to prevent spoofing and impersonation.",
       "Encrypted API request and response payloads between the mobile apps and verification services to protect biometric and identity data."
+    ],
+    "highlights": [
+      {
+        "title": "Fingerprint capture",
+        "text": "Captured fingerprints and generated WSQ fingerprint templates for verification against national identity records."
+      },
+      {
+        "title": "Liveness and face matching",
+        "text": "Worked on liveness detection and face matching engines for remote verification, preventing spoofing and impersonation."
+      },
+      {
+        "title": "Encrypted payloads",
+        "text": "Encrypted API requests and responses between the mobile apps and verification services to protect biometric and identity data."
+      }
     ],
     "tech": [
       "WSQ fingerprint templates",
